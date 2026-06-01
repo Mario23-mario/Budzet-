@@ -5,25 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Budżet MSC v3</title>
 <style>
-body{background:#0f172a;color:#fff;font-family:Arial,sans-serif;max-width:950px;margin:auto;padding:20px}
-.card{background:#1e293b;border-radius:14px;padding:16px;margin-bottom:14px}
-h1{text-align:center}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0}
-input{width:140px;padding:10px;border:none;border-radius:8px;background:#334155;color:#fff}
+body{background:#0f172a;color:white;font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:20px}
+.card{background:#1e293b;padding:16px;border-radius:12px;margin-bottom:15px}
+.row{display:flex;justify-content:space-between;gap:10px;margin:8px 0}
+input{width:140px;padding:10px;border:none;border-radius:8px;background:#334155;color:white}
+button{padding:12px 16px;border:none;border-radius:8px;cursor:pointer}
 .total{font-weight:bold;color:#4ade80}
-button{padding:12px 16px;border:none;border-radius:10px;cursor:pointer;margin-right:8px}
-.actions{display:flex;gap:10px;flex-wrap:wrap}
 </style>
 </head>
 <body>
-
 <h1>💶 Budżet MSC v3</h1>
 
 <div class="card">
 <h2>Przychody</h2>
-<div class="row"><span>Twoja wypłata</span><input id="wyplata" type="number"></div>
+<div class="row"><span>Wypłata</span><input id="wyplata" type="number"></div>
 <div class="row"><span>Kindergeld</span><input id="kindergeld" type="number"></div>
-<div class="row total"><span>Razem przychody</span><span id="przychody">0 €</span></div>
+<div class="row total"><span>Razem</span><span id="income">0 €</span></div>
 </div>
 
 <div class="card">
@@ -40,7 +37,7 @@ button{padding:12px 16px;border:none;border-radius:10px;cursor:pointer;margin-ri
 <div class="row"><span>Rata</span><input id="rata" type="number"></div>
 <div class="row"><span>Klarna</span><input id="klarna" type="number"></div>
 <div class="row"><span>Potrzeby</span><input id="potrzeby" type="number"></div>
-<div class="row"><span>Pozostałe wydatki</span><input id="inne" type="number"></div>
+<div class="row"><span>Pozostałe</span><input id="inne" type="number"></div>
 </div>
 
 <div class="card">
@@ -51,68 +48,74 @@ button{padding:12px 16px;border:none;border-radius:10px;cursor:pointer;margin-ri
 
 <div class="card">
 <h2>Podsumowanie</h2>
-<div class="row total"><span>Razem przychody</span><span id="p1">0 €</span></div>
-<div class="row total"><span>Razem wydatki</span><span id="p2">0 €</span></div>
-<div class="row total"><span>Razem oszczędności</span><span id="p3">0 €</span></div>
-<div class="row total"><span>Wolne środki</span><span id="p4">0 €</span></div>
+<p>Przychody: <span id="s1">0 €</span></p>
+<p>Wydatki: <span id="s2">0 €</span></p>
+<p>Oszczędności: <span id="s3">0 €</span></p>
+<p>Wolne środki: <span id="s4">0 €</span></p>
 </div>
 
 <div class="card">
-<h2>Miesiące</h2>
-<div class="actions">
 <button onclick="saveMonth()">💾 Zapisz miesiąc</button>
-<label>📂 Wczytaj miesiąc <input type="file" id="file" style="display:none" onchange="loadMonth(event)"></label>
-</div>
+<input type="file" accept=".json" onchange="loadMonth(event)">
+<p id="status"></p>
 </div>
 
 <script>
 const fields=[...document.querySelectorAll('input[type=number]')];
 
-function val(id){return Number(document.getElementById(id).value)||0;}
+function v(id){return Number(document.getElementById(id).value)||0;}
 
 function calc(){
- const income=val('wyplata')+val('kindergeld');
- const expenses=val('czynsz')+val('prad')+val('telefony')+val('internet')+val('ubezpieczenie')
- +val('rata')+val('klarna')+val('potrzeby')+val('inne');
- const savings=val('btc')+val('fundusz');
- const free=income-expenses-savings;
+const income=v('wyplata')+v('kindergeld');
+const expenses=v('czynsz')+v('prad')+v('telefony')+v('internet')+v('ubezpieczenie')+v('rata')+v('klarna')+v('potrzeby')+v('inne');
+const savings=v('btc')+v('fundusz');
+const free=income-expenses-savings;
 
- document.getElementById('przychody').textContent=income.toFixed(2)+' €';
- document.getElementById('p1').textContent=income.toFixed(2)+' €';
- document.getElementById('p2').textContent=expenses.toFixed(2)+' €';
- document.getElementById('p3').textContent=savings.toFixed(2)+' €';
- document.getElementById('p4').textContent=free.toFixed(2)+' €';
+incomeEl=document.getElementById('income');
+incomeEl.textContent=income.toFixed(2)+' €';
+document.getElementById('s1').textContent=income.toFixed(2)+' €';
+document.getElementById('s2').textContent=expenses.toFixed(2)+' €';
+document.getElementById('s3').textContent=savings.toFixed(2)+' €';
+document.getElementById('s4').textContent=free.toFixed(2)+' €';
 
- localStorage.setItem('budzetMSCv3',JSON.stringify(Object.fromEntries(fields.map(f=>[f.id,f.value]))));
+localStorage.setItem('budzetMSCv3',JSON.stringify(Object.fromEntries(fields.map(f=>[f.id,f.value]))));
 }
 
 fields.forEach(f=>f.addEventListener('input',calc));
 
 const saved=JSON.parse(localStorage.getItem('budzetMSCv3')||'{}');
-fields.forEach(f=>{ if(saved[f.id]!==undefined) f.value=saved[f.id];});
+fields.forEach(f=>{if(saved[f.id]!==undefined)f.value=saved[f.id]});
 calc();
 
 function saveMonth(){
- const data=Object.fromEntries(fields.map(f=>[f.id,f.value]));
- const d=new Date();
- const name=`Budzet_MSC_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}.json`;
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
- const a=document.createElement('a');
- a.href=URL.createObjectURL(blob);
- a.download=name;
- a.click();
+const data=Object.fromEntries(fields.map(f=>[f.id,f.value]));
+const d=new Date();
+const fileName=`Budzet_MSC_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}.json`;
+const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download=fileName;
+a.click();
 }
 
-function loadMonth(e){
- const file=e.target.files[0];
- if(!file) return;
- const r=new FileReader();
- r.onload=function(){
-   const data=JSON.parse(r.result);
-   fields.forEach(f=>{ if(data[f.id]!==undefined) f.value=data[f.id]; });
-   calc();
- };
- r.readAsText(file);
+function loadMonth(event){
+const file=event.target.files[0];
+if(!file) return;
+
+const reader=new FileReader();
+reader.onload=function(e){
+try{
+const data=JSON.parse(e.target.result);
+fields.forEach(f=>{
+ if(data[f.id]!==undefined){f.value=data[f.id];}
+});
+calc();
+document.getElementById('status').textContent='✅ Wczytano: '+file.name;
+}catch(err){
+document.getElementById('status').textContent='❌ Błąd pliku JSON';
+}
+};
+reader.readAsText(file);
 }
 </script>
 </body>
