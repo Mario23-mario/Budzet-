@@ -3,238 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Budżet MSC v2</title>
-
+<title>Budżet MSC v3</title>
 <style>
-body{
-background:#0f172a;
-color:#fff;
-font-family:Arial,sans-serif;
-max-width:900px;
-margin:auto;
-padding:20px;
-}
-
-h1{
-text-align:center;
-margin-bottom:20px;
-}
-
-.card{
-background:#1e293b;
-padding:15px;
-border-radius:12px;
-margin-bottom:15px;
-}
-
-.row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin:10px 0;
-gap:10px;
-}
-
-input{
-width:120px;
-padding:8px;
-border:none;
-border-radius:8px;
-background:#334155;
-color:white;
-text-align:right;
-}
-
-.total{
-font-weight:bold;
-font-size:18px;
-color:#4ade80;
-}
-
-.summary{
-font-size:20px;
-font-weight:bold;
-}
+body{background:#0f172a;color:#fff;font-family:Arial,sans-serif;max-width:950px;margin:auto;padding:20px}
+.card{background:#1e293b;border-radius:14px;padding:16px;margin-bottom:14px}
+h1{text-align:center}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0}
+input{width:140px;padding:10px;border:none;border-radius:8px;background:#334155;color:#fff}
+.total{font-weight:bold;color:#4ade80}
+button{padding:12px 16px;border:none;border-radius:10px;cursor:pointer;margin-right:8px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
 </style>
 </head>
-
 <body>
 
-<h1>💶 Budżet MSC v2</h1>
+<h1>💶 Budżet MSC v3</h1>
 
 <div class="card">
 <h2>Przychody</h2>
-
-<div class="row">
-<span>Twoja wypłata</span>
-<input id="wyplata" type="number">
-</div>
-
-<div class="row">
-<span>Kindergeld</span>
-<input id="kindergeld" type="number">
-</div>
-
-<div class="row total">
-<span>Razem przychody</span>
-<span id="przychody">0 €</span>
-</div>
+<div class="row"><span>Twoja wypłata</span><input id="wyplata" type="number"></div>
+<div class="row"><span>Kindergeld</span><input id="kindergeld" type="number"></div>
+<div class="row total"><span>Razem przychody</span><span id="przychody">0 €</span></div>
 </div>
 
 <div class="card">
 <h2>Stałe wydatki</h2>
-
-<div class="row">
-<span>Czynsz</span>
-<input id="czynsz" type="number">
-</div>
-
-<div class="row">
-<span>Prąd</span>
-<input id="prad" type="number">
-</div>
-
-<div class="row">
-<span>Telefony</span>
-<input id="telefony" type="number">
-</div>
-
-<div class="row">
-<span>Internet</span>
-<input id="internet" type="number">
-</div>
-
-<div class="row">
-<span>Ubezpieczenie auta</span>
-<input id="ubezpieczenie" type="number">
-</div>
-
-<div class="row total">
-<span>Razem stałe</span>
-<span id="stale">0 €</span>
-</div>
+<div class="row"><span>Czynsz</span><input id="czynsz" type="number"></div>
+<div class="row"><span>Prąd</span><input id="prad" type="number"></div>
+<div class="row"><span>Telefony</span><input id="telefony" type="number"></div>
+<div class="row"><span>Internet</span><input id="internet" type="number"></div>
+<div class="row"><span>Ubezpieczenie auta</span><input id="ubezpieczenie" type="number"></div>
 </div>
 
 <div class="card">
 <h2>Inne wydatki</h2>
-
-<div class="row">
-<span>Rata</span>
-<input id="rata" type="number">
-</div>
-
-<div class="row">
-<span>Klarna</span>
-<input id="klarna" type="number">
-</div>
-
-<div class="row">
-<span>Potrzeby</span>
-<input id="potrzeby" type="number">
-</div>
-
-<div class="row">
-<span>Pozostałe wydatki</span>
-<input id="inne" type="number">
-</div>
+<div class="row"><span>Rata</span><input id="rata" type="number"></div>
+<div class="row"><span>Klarna</span><input id="klarna" type="number"></div>
+<div class="row"><span>Potrzeby</span><input id="potrzeby" type="number"></div>
+<div class="row"><span>Pozostałe wydatki</span><input id="inne" type="number"></div>
 </div>
 
 <div class="card">
 <h2>Oszczędności</h2>
-
-<div class="row">
-<span>BTC / ETF</span>
-<input id="btc" type="number">
-</div>
-
-<div class="row">
-<span>Fundusz awaryjny</span>
-<input id="fundusz" type="number" value="0">
-</div>
+<div class="row"><span>BTC / ETF</span><input id="btc" type="number"></div>
+<div class="row"><span>Fundusz awaryjny</span><input id="fundusz" type="number"></div>
 </div>
 
 <div class="card">
 <h2>Podsumowanie</h2>
-
-<div class="row summary">
-<span>Pozostały budżet</span>
-<span id="pozostaly">0 €</span>
+<div class="row total"><span>Razem przychody</span><span id="p1">0 €</span></div>
+<div class="row total"><span>Razem wydatki</span><span id="p2">0 €</span></div>
+<div class="row total"><span>Razem oszczędności</span><span id="p3">0 €</span></div>
+<div class="row total"><span>Wolne środki</span><span id="p4">0 €</span></div>
 </div>
 
-<div class="row summary">
-<span>Wolne środki</span>
-<span id="wolne">0 €</span>
+<div class="card">
+<h2>Miesiące</h2>
+<div class="actions">
+<button onclick="saveMonth()">💾 Zapisz miesiąc</button>
+<label>📂 Wczytaj miesiąc <input type="file" id="file" style="display:none" onchange="loadMonth(event)"></label>
 </div>
-
-<div class="row">
-<span>Oszczędności</span>
-<span id="oszczednosci">0 €</span>
-</div>
-
 </div>
 
 <script>
+const fields=[...document.querySelectorAll('input[type=number]')];
 
-const pola=document.querySelectorAll("input");
+function val(id){return Number(document.getElementById(id).value)||0;}
 
-function v(id){
-return Number(document.getElementById(id).value)||0;
+function calc(){
+ const income=val('wyplata')+val('kindergeld');
+ const expenses=val('czynsz')+val('prad')+val('telefony')+val('internet')+val('ubezpieczenie')
+ +val('rata')+val('klarna')+val('potrzeby')+val('inne');
+ const savings=val('btc')+val('fundusz');
+ const free=income-expenses-savings;
+
+ document.getElementById('przychody').textContent=income.toFixed(2)+' €';
+ document.getElementById('p1').textContent=income.toFixed(2)+' €';
+ document.getElementById('p2').textContent=expenses.toFixed(2)+' €';
+ document.getElementById('p3').textContent=savings.toFixed(2)+' €';
+ document.getElementById('p4').textContent=free.toFixed(2)+' €';
+
+ localStorage.setItem('budzetMSCv3',JSON.stringify(Object.fromEntries(fields.map(f=>[f.id,f.value]))));
 }
 
-function licz(){
+fields.forEach(f=>f.addEventListener('input',calc));
 
-const przychody=
-v("wyplata")+
-v("kindergeld");
+const saved=JSON.parse(localStorage.getItem('budzetMSCv3')||'{}');
+fields.forEach(f=>{ if(saved[f.id]!==undefined) f.value=saved[f.id];});
+calc();
 
-const stale=
-v("czynsz")+
-v("prad")+
-v("telefony")+
-v("internet")+
-v("ubezpieczenie");
-
-const inne=
-v("rata")+
-v("klarna")+
-v("potrzeby")+
-v("inne");
-
-const oszcz=
-v("btc")+
-v("fundusz");
-
-const pozostaly=
-przychody-stale;
-
-const wolne=
-przychody-stale-inne-oszcz;
-
-document.getElementById("przychody").innerText=przychody.toFixed(2)+" €";
-document.getElementById("stale").innerText=stale.toFixed(2)+" €";
-document.getElementById("pozostaly").innerText=pozostaly.toFixed(2)+" €";
-document.getElementById("wolne").innerText=wolne.toFixed(2)+" €";
-document.getElementById("oszczednosci").innerText=oszcz.toFixed(2)+" €";
-
-localStorage.setItem("budzetMSCv2",
-JSON.stringify(
-[...pola].map(x=>x.value)
-));
+function saveMonth(){
+ const data=Object.fromEntries(fields.map(f=>[f.id,f.value]));
+ const d=new Date();
+ const name=`Budzet_MSC_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}.json`;
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download=name;
+ a.click();
 }
 
-let zapis=JSON.parse(localStorage.getItem("budzetMSCv2"));
-
-if(zapis){
-pola.forEach((p,i)=>{
-if(zapis[i]!==undefined) p.value=zapis[i];
-});
+function loadMonth(e){
+ const file=e.target.files[0];
+ if(!file) return;
+ const r=new FileReader();
+ r.onload=function(){
+   const data=JSON.parse(r.result);
+   fields.forEach(f=>{ if(data[f.id]!==undefined) f.value=data[f.id]; });
+   calc();
+ };
+ r.readAsText(file);
 }
-
-pola.forEach(p=>p.addEventListener("input",licz));
-
-licz();
-
 </script>
-
 </body>
 </html>
