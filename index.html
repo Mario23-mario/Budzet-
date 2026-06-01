@@ -1,10 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Budżet MSC</title>
+
+<style>
+body{
+    background:#121212;
+    color:white;
+    font-family:Arial,sans-serif;
+    max-width:800px;
+    margin:auto;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+.section{
+    background:#1e1e1e;
+    padding:15px;
+    margin-bottom:20px;
+    border-radius:12px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:5px 0;
+    border:none;
+    border-radius:8px;
+    background:#2c2c2c;
+    color:white;
+}
+
+.result{
+    font-size:22px;
+    font-weight:bold;
+    text-align:center;
+    color:#4caf50;
+}
+</style>
 </head>
+
 <body>
-<h1>Budżet MSC</h1>
-<p>Działa! 🚀</p>
+
+<h1>💶 Budżet MSC</h1>
+
+<div class="section">
+<h2>Przychody</h2>
+
+<label>Twoja wypłata (€)</label>
+<input id="wyplata" type="number">
+
+<label>Kindergeld (€)</label>
+<input id="kindergeld" type="number">
+</div>
+
+<div class="section">
+<h2>Stałe wydatki</h2>
+
+<label>Czynsz</label>
+<input id="czynsz" type="number">
+
+<label>Prąd</label>
+<input id="prad" type="number">
+
+<label>Telefony</label>
+<input id="telefony" type="number">
+
+<label>Internet</label>
+<input id="internet" type="number">
+</div>
+
+<div class="section">
+<h2>Pozostałe</h2>
+
+<label>Rata</label>
+<input id="rata" type="number">
+
+<label>Klarna</label>
+<input id="klarna" type="number">
+
+<label>BTC / ETF</label>
+<input id="btc" type="number">
+
+<label>Ubezpieczenie auta</label>
+<input id="auto" type="number">
+</div>
+
+<div class="section">
+<button onclick="oblicz()" style="width:100%;padding:15px;font-size:18px;">
+Oblicz
+</button>
+</div>
+
+<div class="section">
+<div class="result" id="wynik">
+Saldo: 0 €
+</div>
+</div>
+
+<script>
+function v(id){
+return Number(document.getElementById(id).value)||0;
+}
+
+function oblicz(){
+
+let przychody =
+v("wyplata")+
+v("kindergeld");
+
+let wydatki =
+v("czynsz")+
+v("prad")+
+v("telefony")+
+v("internet")+
+v("rata")+
+v("klarna")+
+v("btc")+
+v("auto");
+
+let saldo = przychody-wydatki;
+
+document.getElementById("wynik").innerHTML =
+"Saldo: "+saldo.toFixed(2)+" €";
+}
+</script>
+
 </body>
 </html>
