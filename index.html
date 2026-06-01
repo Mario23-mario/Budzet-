@@ -10,7 +10,7 @@ body{
     background:#121212;
     color:white;
     font-family:Arial,sans-serif;
-    max-width:800px;
+    max-width:900px;
     margin:auto;
     padding:20px;
 }
@@ -19,116 +19,233 @@ h1{
     text-align:center;
 }
 
-.section{
+.box{
     background:#1e1e1e;
     padding:15px;
-    margin-bottom:20px;
     border-radius:12px;
+    margin-bottom:20px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin:8px 0;
+    gap:10px;
 }
 
 input{
-    width:100%;
-    padding:10px;
-    margin:5px 0;
-    border:none;
-    border-radius:8px;
-    background:#2c2c2c;
+    width:120px;
+    background:#2b2b2b;
     color:white;
+    border:none;
+    padding:8px;
+    border-radius:8px;
+    text-align:right;
 }
 
-.result{
-    font-size:22px;
+.total{
+    font-size:20px;
     font-weight:bold;
-    text-align:center;
     color:#4caf50;
+}
+
+.stat{
+    font-size:18px;
+    margin:10px 0;
 }
 </style>
 </head>
 
 <body>
 
-<h1>💶 Budżet MSC</h1>
+<h1>💰 Budżet MSC</h1>
 
-<div class="section">
+<div class="box">
 <h2>Przychody</h2>
 
-<label>Twoja wypłata (€)</label>
-<input id="wyplata" type="number">
-
-<label>Kindergeld (€)</label>
-<input id="kindergeld" type="number">
+<div class="row">
+<span>Twoja wypłata</span>
+<input type="number" id="wyplata" value="1541.62">
 </div>
 
-<div class="section">
+<div class="row">
+<span>Kindergeld</span>
+<input type="number" id="kindergeld" value="518">
+</div>
+
+<div class="row total">
+<span>Razem przychody</span>
+<span id="przychody">0 €</span>
+</div>
+</div>
+
+<div class="box">
 <h2>Stałe wydatki</h2>
 
-<label>Czynsz</label>
-<input id="czynsz" type="number">
-
-<label>Prąd</label>
-<input id="prad" type="number">
-
-<label>Telefony</label>
-<input id="telefony" type="number">
-
-<label>Internet</label>
-<input id="internet" type="number">
+<div class="row">
+<span>Czynsz</span>
+<input type="number" id="czynsz" value="500">
 </div>
 
-<div class="section">
-<h2>Pozostałe</h2>
-
-<label>Rata</label>
-<input id="rata" type="number">
-
-<label>Klarna</label>
-<input id="klarna" type="number">
-
-<label>BTC / ETF</label>
-<input id="btc" type="number">
-
-<label>Ubezpieczenie auta</label>
-<input id="auto" type="number">
+<div class="row">
+<span>Prąd</span>
+<input type="number" id="prad" value="320">
 </div>
 
-<div class="section">
-<button onclick="oblicz()" style="width:100%;padding:15px;font-size:18px;">
-Oblicz
-</button>
+<div class="row">
+<span>Telefony</span>
+<input type="number" id="telefony" value="240">
 </div>
 
-<div class="section">
-<div class="result" id="wynik">
-Saldo: 0 €
+<div class="row">
+<span>Internet</span>
+<input type="number" id="internet" value="118">
+</div>
+
+<div class="row total">
+<span>Razem stałe</span>
+<span id="stale">0 €</span>
+</div>
+</div>
+
+<div class="box">
+<h2>Pozostały budżet</h2>
+
+<div class="row total">
+<span>Dostępne środki</span>
+<span id="pozostaly">0 €</span>
+</div>
+</div>
+
+<div class="box">
+<h2>Inne wydatki</h2>
+
+<div class="row">
+<span>Rata</span>
+<input type="number" id="rata" value="40">
+</div>
+
+<div class="row">
+<span>Klarna</span>
+<input type="number" id="klarna" value="176">
+</div>
+
+<div class="row">
+<span>Potrzeby</span>
+<input type="number" id="potrzeby" value="0">
+</div>
+
+<div class="row">
+<span>Inwestycja BTC/ETF</span>
+<input type="number" id="inwestycja" value="20">
+</div>
+
+<div class="row">
+<span>Ubezpieczenie auta</span>
+<input type="number" id="ubezpieczenie" value="58">
+</div>
+
+<div class="row">
+<span>Pozostałe wydatki</span>
+<input type="number" id="inne" value="0">
+</div>
+
+<div class="row total">
+<span>Suma wydatków dodatkowych</span>
+<span id="dodatkowe">0 €</span>
+</div>
+</div>
+
+<div class="box">
+<h2>Statystyki</h2>
+
+<div class="stat">
+Wolne środki:
+<span id="wolne">0 €</span>
+</div>
+
+<div class="stat">
+Oszczędności:
+<span id="oszczednosci">0%</span>
+</div>
+
+<div class="stat">
+Wydatki:
+<span id="wydatkiProcent">0%</span>
 </div>
 </div>
 
 <script>
-function v(id){
-return Number(document.getElementById(id).value)||0;
+
+const pola=document.querySelectorAll("input");
+
+function licz(){
+
+let wyplata=Number(document.getElementById("wyplata").value)||0;
+let kindergeld=Number(document.getElementById("kindergeld").value)||0;
+
+let przychody=wyplata+kindergeld;
+
+let stale=
+Number(czynsz.value)+
+Number(prad.value)+
+Number(telefony.value)+
+Number(internet.value);
+
+let pozostaly=przychody-stale;
+
+let dodatkowe=
+Number(rata.value)+
+Number(klarna.value)+
+Number(potrzeby.value)+
+Number(inwestycja.value)+
+Number(ubezpieczenie.value)+
+Number(inne.value);
+
+let wolne=pozostaly-dodatkowe;
+
+let wydatki=((stale+dodatkowe)/przychody)*100;
+let oszczednosci=(wolne/przychody)*100;
+
+document.getElementById("przychody").innerText=
+przychody.toFixed(2)+" €";
+
+document.getElementById("stale").innerText=
+stale.toFixed(2)+" €";
+
+document.getElementById("pozostaly").innerText=
+pozostaly.toFixed(2)+" €";
+
+document.getElementById("dodatkowe").innerText=
+dodatkowe.toFixed(2)+" €";
+
+document.getElementById("wolne").innerText=
+wolne.toFixed(2)+" €";
+
+document.getElementById("wydatkiProcent").innerText=
+wydatki.toFixed(1)+" %";
+
+document.getElementById("oszczednosci").innerText=
+oszczednosci.toFixed(1)+" %";
+
+localStorage.setItem("budzetMSC",JSON.stringify(
+[...pola].map(x=>x.value)
+));
+
 }
 
-function oblicz(){
+let zapis=JSON.parse(localStorage.getItem("budzetMSC"));
 
-let przychody =
-v("wyplata")+
-v("kindergeld");
-
-let wydatki =
-v("czynsz")+
-v("prad")+
-v("telefony")+
-v("internet")+
-v("rata")+
-v("klarna")+
-v("btc")+
-v("auto");
-
-let saldo = przychody-wydatki;
-
-document.getElementById("wynik").innerHTML =
-"Saldo: "+saldo.toFixed(2)+" €";
+if(zapis){
+pola.forEach((p,i)=>{
+if(zapis[i]!==undefined) p.value=zapis[i];
+});
 }
+
+pola.forEach(p=>p.addEventListener("input",licz));
+
+licz();
+
 </script>
 
 </body>
