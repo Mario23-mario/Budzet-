@@ -1,122 +1,1037 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Budżet MSC v3</title>
-<style>
-body{background:#0f172a;color:white;font-family:Arial,sans-serif;max-width:1000px;margin:auto;padding:20px}
-.card{background:#1e293b;padding:16px;border-radius:12px;margin-bottom:15px}
-.row{display:flex;justify-content:space-between;gap:10px;margin:8px 0}
-input{width:140px;padding:10px;border:none;border-radius:8px;background:#334155;color:white}
-button{padding:12px 16px;border:none;border-radius:8px;cursor:pointer}
-.total{font-weight:bold;color:#4ade80}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0f14">
+  <title>💶 Budżet MSC Pro</title>
+  <style>
+    /* Globalny system kolorów i odstępów dla ciemnego motywu premium. */
+    :root {
+      color-scheme: dark;
+      --bg: #090d12;
+      --bg-soft: #10161f;
+      --panel: rgba(21, 28, 38, 0.82);
+      --panel-strong: rgba(28, 36, 49, 0.95);
+      --line: rgba(255, 255, 255, 0.1);
+      --line-strong: rgba(255, 255, 255, 0.16);
+      --text: #f6f8fb;
+      --muted: #a9b3c1;
+      --green: #24d178;
+      --red: #ff5e73;
+      --purple: #a96cff;
+      --blue: #4fb6ff;
+      --gold: #f6c451;
+      --cyan: #3ee0d1;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --radius: 24px;
+      --radius-small: 16px;
+      --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 4%, rgba(36, 209, 120, 0.14), transparent 30rem),
+        radial-gradient(circle at 88% 10%, rgba(79, 182, 255, 0.12), transparent 28rem),
+        linear-gradient(135deg, #090d12 0%, #0d1118 46%, #121018 100%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      padding: 28px 0 22px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.88rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: 1;
+      font-weight: 860;
+    }
+
+    .subtitle {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.4vw, 1.25rem);
+    }
+
+    .month-pill {
+      min-width: 180px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-small);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      text-align: right;
+      box-shadow: var(--shadow);
+    }
+
+    .month-pill strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--text);
+      font-size: 1.2rem;
+    }
+
+    /* Kafelki dashboardu automatycznie odświeżają się po zmianie pól. */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .metric-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 154px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      transition: transform 220ms var(--ease), border-color 220ms var(--ease);
+    }
+
+    .metric-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--line-strong);
+    }
+
+    .metric-card::after {
+      position: absolute;
+      inset: auto -46px -58px auto;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+      background: var(--accent);
+      content: "";
+      filter: blur(8px);
+      opacity: 0.16;
+    }
+
+    .metric-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .metric-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--accent) 16%, transparent);
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+
+    .metric-value {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+      font-size: clamp(1.55rem, 2.8vw, 2.25rem);
+      font-weight: 850;
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-note {
+      position: relative;
+      z-index: 1;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Układ główny: formularze po lewej, analiza i akcje po prawej. */
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(330px, 0.88fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 18px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.035));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 20px 20px 0;
+    }
+
+    .section-title {
+      font-size: 1.02rem;
+      font-weight: 820;
+    }
+
+    .section-total {
+      color: var(--muted);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    .fields {
+      display: grid;
+      gap: 12px;
+      padding: 18px 20px 20px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(124px, 180px);
+      gap: 14px;
+      align-items: center;
+      min-height: 60px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.075);
+      border-radius: var(--radius-small);
+      background: rgba(7, 11, 16, 0.42);
+      transition: border-color 180ms var(--ease), background 180ms var(--ease);
+    }
+
+    .field-row:focus-within {
+      border-color: rgba(79, 182, 255, 0.5);
+      background: rgba(12, 18, 26, 0.78);
+    }
+
+    label {
+      color: #dbe2ec;
+      font-weight: 720;
+    }
+
+    .money-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      outline: 0;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      text-align: right;
+      transition: border-color 180ms var(--ease), box-shadow 180ms var(--ease);
+    }
+
+    .money-input:focus {
+      border-color: rgba(62, 224, 209, 0.65);
+      box-shadow: 0 0 0 4px rgba(62, 224, 209, 0.1);
+    }
+
+    .side-panel {
+      position: sticky;
+      top: 16px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 12px;
+      padding: 18px 20px 20px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.075);
+      border-radius: var(--radius-small);
+      background: rgba(7, 11, 16, 0.42);
+      color: var(--muted);
+    }
+
+    .summary-item strong {
+      color: var(--text);
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .goal-body {
+      padding: 18px 20px 20px;
+    }
+
+    .goal-topline {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 128px;
+      gap: 14px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .goal-kpi {
+      font-size: 2rem;
+      font-weight: 860;
+    }
+
+    .goal-kpi span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    .progress-track {
+      overflow: hidden;
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--cyan), var(--gold));
+      box-shadow: 0 0 24px rgba(62, 224, 209, 0.38);
+      transition: width 420ms var(--ease);
+    }
+
+    .chart-wrap {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 18px 20px 20px;
+    }
+
+    canvas {
+      width: 210px;
+      height: 210px;
+      max-width: 100%;
+    }
+
+    .legend {
+      display: grid;
+      gap: 12px;
+    }
+
+    .legend-item {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--dot);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--dot) 50%, transparent);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .action-btn {
+      min-height: 56px;
+      padding: 14px 16px;
+      border-radius: 17px;
+      color: #071015;
+      background: linear-gradient(135deg, #f6f8fb, #b9c8da);
+      font-weight: 840;
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.32);
+      transition: transform 180ms var(--ease), filter 180ms var(--ease);
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    .action-btn.secondary {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(79, 182, 255, 0.32), rgba(169, 108, 255, 0.3));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    /* Krótki komunikat statusu dla zapisu i odczytu plików. */
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 10;
+      max-width: min(420px, calc(100vw - 40px));
+      padding: 15px 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 18px;
+      background: rgba(17, 24, 34, 0.94);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity 220ms var(--ease), transform 220ms var(--ease);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .sr-only {
+      position: absolute;
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      border: 0;
+      margin: -1px;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    /* Responsywność dla tabletów i telefonów. */
+    @media (max-width: 980px) {
+      .dashboard {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell {
+        width: min(100% - 22px, 1180px);
+        padding-top: 14px;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .month-pill {
+        text-align: left;
+      }
+
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .field-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .money-input {
+        text-align: left;
+      }
+
+      .goal-topline,
+      .chart-wrap,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      canvas {
+        justify-self: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 <body>
-<h1>💶 Budżet MSC v3</h1>
+  <main class="app-shell">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Premium budget planner</div>
+        <h1>💶 Budżet MSC Pro</h1>
+        <p class="subtitle">Twój osobisty budżet miesięczny</p>
+      </div>
+      <aside class="month-pill" aria-label="Aktualny miesiąc">
+        Miesiąc budżetu
+        <strong id="currentMonth">2026-06</strong>
+      </aside>
+    </header>
 
-<div class="card">
-<h2>Przychody</h2>
-<div class="row"><span>Wypłata</span><input id="wyplata" type="number"></div>
-<div class="row"><span>Kindergeld</span><input id="kindergeld" type="number"></div>
-<div class="row total"><span>Razem</span><span id="income">0 €</span></div>
-</div>
+    <!-- Dashboard z czterema najważniejszymi wartościami miesiąca. -->
+    <section class="dashboard" aria-label="Dashboard budżetu">
+      <article class="metric-card" style="--accent: var(--green);">
+        <div class="metric-label"><span>🟢 Przychody</span><span class="metric-icon">€</span></div>
+        <div class="metric-value" id="metricIncome">0 €</div>
+        <p class="metric-note">Wpływy miesięczne</p>
+      </article>
+      <article class="metric-card" style="--accent: var(--red);">
+        <div class="metric-label"><span>🔴 Wydatki</span><span class="metric-icon">−</span></div>
+        <div class="metric-value" id="metricExpenses">0 €</div>
+        <p class="metric-note">Stałe i inne koszty</p>
+      </article>
+      <article class="metric-card" style="--accent: var(--purple);">
+        <div class="metric-label"><span>🟣 Oszczędności</span><span class="metric-icon">↗</span></div>
+        <div class="metric-value" id="metricSavings">0 €</div>
+        <p class="metric-note">BTC, ETF i rezerwa</p>
+      </article>
+      <article class="metric-card" style="--accent: var(--blue);">
+        <div class="metric-label"><span>🔵 Wolne środki</span><span class="metric-icon">≈</span></div>
+        <div class="metric-value" id="metricFree">0 €</div>
+        <p class="metric-note">Po wszystkich pozycjach</p>
+      </article>
+    </section>
 
-<div class="card">
-<h2>Stałe wydatki</h2>
-<div class="row"><span>Czynsz</span><input id="czynsz" type="number"></div>
-<div class="row"><span>Prąd</span><input id="prad" type="number"></div>
-<div class="row"><span>Telefony</span><input id="telefony" type="number"></div>
-<div class="row"><span>Internet</span><input id="internet" type="number"></div>
-<div class="row"><span>Ubezpieczenie auta</span><input id="ubezpieczenie" type="number"></div>
-</div>
+    <div class="main-grid">
+      <div class="stack">
+        <!-- Przychody, wydatki i oszczędności są podzielone na czytelne sekcje formularza. -->
+        <section class="section-card" aria-labelledby="incomeTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="incomeTitle">Przychody</h2>
+            <span class="section-total" id="incomeTotal">Razem: 0 €</span>
+          </div>
+          <div class="fields">
+            <div class="field-row">
+              <label for="salary">Twoja wypłata</label>
+              <input class="money-input" id="salary" data-category="income" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="kindergeld">Kindergeld</label>
+              <input class="money-input" id="kindergeld" data-category="income" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+          </div>
+        </section>
 
-<div class="card">
-<h2>Inne wydatki</h2>
-<div class="row"><span>Rata</span><input id="rata" type="number"></div>
-<div class="row"><span>Klarna</span><input id="klarna" type="number"></div>
-<div class="row"><span>Potrzeby</span><input id="potrzeby" type="number"></div>
-<div class="row"><span>Pozostałe</span><input id="inne" type="number"></div>
-</div>
+        <section class="section-card" aria-labelledby="fixedTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="fixedTitle">Stałe wydatki</h2>
+            <span class="section-total" id="fixedTotal">Razem: 0 €</span>
+          </div>
+          <div class="fields">
+            <div class="field-row">
+              <label for="rent">Czynsz</label>
+              <input class="money-input" id="rent" data-category="fixed" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="electricity">Prąd</label>
+              <input class="money-input" id="electricity" data-category="fixed" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="phones">Telefony</label>
+              <input class="money-input" id="phones" data-category="fixed" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="internet">Internet</label>
+              <input class="money-input" id="internet" data-category="fixed" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="carInsurance">Ubezpieczenie auta</label>
+              <input class="money-input" id="carInsurance" data-category="fixed" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+          </div>
+        </section>
 
-<div class="card">
-<h2>Oszczędności</h2>
-<div class="row"><span>BTC / ETF</span><input id="btc" type="number"></div>
-<div class="row"><span>Fundusz awaryjny</span><input id="fundusz" type="number"></div>
-</div>
+        <section class="section-card" aria-labelledby="otherTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="otherTitle">Inne wydatki</h2>
+            <span class="section-total" id="otherTotal">Razem: 0 €</span>
+          </div>
+          <div class="fields">
+            <div class="field-row">
+              <label for="installment">Rata</label>
+              <input class="money-input" id="installment" data-category="other" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="klarna">Klarna</label>
+              <input class="money-input" id="klarna" data-category="other" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="needs">Potrzeby</label>
+              <input class="money-input" id="needs" data-category="other" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="misc">Pozostałe wydatki</label>
+              <input class="money-input" id="misc" data-category="other" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+          </div>
+        </section>
 
-<div class="card">
-<h2>Podsumowanie</h2>
-<p>Przychody: <span id="s1">0 €</span></p>
-<p>Wydatki: <span id="s2">0 €</span></p>
-<p>Oszczędności: <span id="s3">0 €</span></p>
-<p>Wolne środki: <span id="s4">0 €</span></p>
-</div>
+        <section class="section-card" aria-labelledby="savingsTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="savingsTitle">Oszczędności</h2>
+            <span class="section-total" id="savingsTotal">Razem: 0 €</span>
+          </div>
+          <div class="fields">
+            <div class="field-row">
+              <label for="btcEtf">BTC / ETF</label>
+              <input class="money-input" id="btcEtf" data-category="savings" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field-row">
+              <label for="emergencyFund">Fundusz awaryjny</label>
+              <input class="money-input" id="emergencyFund" data-category="savings" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            </div>
+          </div>
+        </section>
+      </div>
 
-<div class="card">
-<button onclick="saveMonth()">💾 Zapisz miesiąc</button>
-<input type="file" accept=".json" onchange="loadMonth(event)">
-<p id="status"></p>
-</div>
+      <aside class="side-panel">
+        <section class="section-card" aria-labelledby="summaryTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="summaryTitle">Podsumowanie</h2>
+          </div>
+          <div class="summary-list">
+            <div class="summary-item"><span>Razem przychody</span><strong id="summaryIncome">0 €</strong></div>
+            <div class="summary-item"><span>Razem wydatki</span><strong id="summaryExpenses">0 €</strong></div>
+            <div class="summary-item"><span>Razem oszczędności</span><strong id="summarySavings">0 €</strong></div>
+            <div class="summary-item"><span>Wolne środki</span><strong id="summaryFree">0 €</strong></div>
+          </div>
+        </section>
 
-<script>
-const fields=[...document.querySelectorAll('input[type=number]')];
+        <section class="section-card" aria-labelledby="goalTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="goalTitle">🎯 Cel oszczędności</h2>
+          </div>
+          <div class="goal-body">
+            <div class="goal-topline">
+              <div class="goal-kpi"><span id="goalPercent">0%</span><span id="goalAmount">0 € z 200 €</span></div>
+              <div>
+                <label class="sr-only" for="savingsGoal">Cel oszczędności</label>
+                <input class="money-input" id="savingsGoal" type="number" min="1" step="0.01" inputmode="decimal" value="200">
+              </div>
+            </div>
+            <div class="progress-track" aria-label="Postęp celu oszczędności">
+              <div class="progress-bar" id="goalProgress"></div>
+            </div>
+          </div>
+        </section>
 
-function v(id){return Number(document.getElementById(id).value)||0;}
+        <section class="section-card" aria-labelledby="chartTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="chartTitle">Wykres budżetu</h2>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="budgetChart" width="420" height="420" aria-label="Wykres kołowy budżetu" role="img"></canvas>
+            <div class="legend" aria-label="Legenda wykresu">
+              <div class="legend-item"><span class="dot" style="--dot: var(--red);"></span><span>Wydatki</span><strong id="legendExpenses">0 €</strong></div>
+              <div class="legend-item"><span class="dot" style="--dot: var(--purple);"></span><span>Oszczędności</span><strong id="legendSavings">0 €</strong></div>
+              <div class="legend-item"><span class="dot" style="--dot: var(--blue);"></span><span>Wolne środki</span><strong id="legendFree">0 €</strong></div>
+            </div>
+          </div>
+        </section>
 
-function calc(){
-const income=v('wyplata')+v('kindergeld');
-const expenses=v('czynsz')+v('prad')+v('telefony')+v('internet')+v('ubezpieczenie')+v('rata')+v('klarna')+v('potrzeby')+v('inne');
-const savings=v('btc')+v('fundusz');
-const free=income-expenses-savings;
+        <section class="section-card" aria-label="Zapis i odczyt danych">
+          <div class="actions">
+            <button class="action-btn" id="saveBtn" type="button">💾 Zapisz miesiąc</button>
+            <button class="action-btn secondary" id="loadBtn" type="button">📂 Wczytaj miesiąc</button>
+          </div>
+          <input class="sr-only" id="fileInput" type="file" accept="application/json,.json">
+        </section>
+      </aside>
+    </div>
+  </main>
 
-incomeEl=document.getElementById('income');
-incomeEl.textContent=income.toFixed(2)+' €';
-document.getElementById('s1').textContent=income.toFixed(2)+' €';
-document.getElementById('s2').textContent=expenses.toFixed(2)+' €';
-document.getElementById('s3').textContent=savings.toFixed(2)+' €';
-document.getElementById('s4').textContent=free.toFixed(2)+' €';
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-localStorage.setItem('budzetMSCv3',JSON.stringify(Object.fromEntries(fields.map(f=>[f.id,f.value]))));
-}
+  <script>
+    (() => {
+      "use strict";
 
-fields.forEach(f=>f.addEventListener('input',calc));
+      // Stały klucz localStorage pozwala odtworzyć ostatni stan po ponownym otwarciu strony.
+      const STORAGE_KEY = "budzet-msc-pro-state";
+      const fieldIds = [
+        "salary",
+        "kindergeld",
+        "rent",
+        "electricity",
+        "phones",
+        "internet",
+        "carInsurance",
+        "installment",
+        "klarna",
+        "needs",
+        "misc",
+        "btcEtf",
+        "emergencyFund",
+        "savingsGoal"
+      ];
 
-const saved=JSON.parse(localStorage.getItem('budzetMSCv3')||'{}');
-fields.forEach(f=>{if(saved[f.id]!==undefined)f.value=saved[f.id]});
-calc();
+      // Kategorie sterują sumowaniem pól w dashboardzie, podsumowaniu i wykresie.
+      const categoryMap = {
+        income: ["salary", "kindergeld"],
+        fixed: ["rent", "electricity", "phones", "internet", "carInsurance"],
+        other: ["installment", "klarna", "needs", "misc"],
+        savings: ["btcEtf", "emergencyFund"]
+      };
 
-function saveMonth(){
-const data=Object.fromEntries(fields.map(f=>[f.id,f.value]));
-const d=new Date();
-const fileName=`Budzet_MSC_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}.json`;
-const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download=fileName;
-a.click();
-}
+      const chartColors = {
+        expenses: "#ff5e73",
+        savings: "#a96cff",
+        free: "#4fb6ff"
+      };
 
-function loadMonth(event){
-const file=event.target.files[0];
-if(!file) return;
+      const elements = {};
+      fieldIds.forEach((id) => {
+        elements[id] = document.getElementById(id);
+      });
 
-const reader=new FileReader();
-reader.onload=function(e){
-try{
-const data=JSON.parse(e.target.result);
-fields.forEach(f=>{
- if(data[f.id]!==undefined){f.value=data[f.id];}
-});
-calc();
-document.getElementById('status').textContent='✅ Wczytano: '+file.name;
-}catch(err){
-document.getElementById('status').textContent='❌ Błąd pliku JSON';
-}
-};
-reader.readAsText(file);
-}
-</script>
+      const ui = {
+        currentMonth: document.getElementById("currentMonth"),
+        metricIncome: document.getElementById("metricIncome"),
+        metricExpenses: document.getElementById("metricExpenses"),
+        metricSavings: document.getElementById("metricSavings"),
+        metricFree: document.getElementById("metricFree"),
+        incomeTotal: document.getElementById("incomeTotal"),
+        fixedTotal: document.getElementById("fixedTotal"),
+        otherTotal: document.getElementById("otherTotal"),
+        savingsTotal: document.getElementById("savingsTotal"),
+        summaryIncome: document.getElementById("summaryIncome"),
+        summaryExpenses: document.getElementById("summaryExpenses"),
+        summarySavings: document.getElementById("summarySavings"),
+        summaryFree: document.getElementById("summaryFree"),
+        goalPercent: document.getElementById("goalPercent"),
+        goalAmount: document.getElementById("goalAmount"),
+        goalProgress: document.getElementById("goalProgress"),
+        legendExpenses: document.getElementById("legendExpenses"),
+        legendSavings: document.getElementById("legendSavings"),
+        legendFree: document.getElementById("legendFree"),
+        saveBtn: document.getElementById("saveBtn"),
+        loadBtn: document.getElementById("loadBtn"),
+        fileInput: document.getElementById("fileInput"),
+        toast: document.getElementById("toast"),
+        chart: document.getElementById("budgetChart")
+      };
+
+      // Formatowanie zachowuje polski zapis waluty i usuwa niepotrzebne grosze.
+      const formatMoney = (value) => {
+        const normalized = Math.abs(value) < 0.005 ? 0 : value;
+        return new Intl.NumberFormat("pl-PL", {
+          style: "currency",
+          currency: "EUR",
+          minimumFractionDigits: normalized % 1 === 0 ? 0 : 2,
+          maximumFractionDigits: 2
+        }).format(normalized);
+      };
+
+      const parseMoney = (value) => {
+        const normalized = String(value ?? "").replace(",", ".");
+        const parsed = Number.parseFloat(normalized);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+      };
+
+      const getCurrentMonth = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        return `${year}-${month}`;
+      };
+
+      const getFormData = () => {
+        return fieldIds.reduce((data, id) => {
+          data[id] = parseMoney(elements[id].value);
+          return data;
+        }, {});
+      };
+
+      const sumFields = (data, ids) => ids.reduce((sum, id) => sum + (data[id] || 0), 0);
+
+      const calculateTotals = (data) => {
+        const income = sumFields(data, categoryMap.income);
+        const fixedExpenses = sumFields(data, categoryMap.fixed);
+        const otherExpenses = sumFields(data, categoryMap.other);
+        const expenses = fixedExpenses + otherExpenses;
+        const savings = sumFields(data, categoryMap.savings);
+        const free = income - expenses - savings;
+
+        return { income, fixedExpenses, otherExpenses, expenses, savings, free };
+      };
+
+      const setText = (element, value) => {
+        element.textContent = value;
+      };
+
+      const showToast = (message) => {
+        window.clearTimeout(showToast.timeoutId);
+        ui.toast.textContent = message;
+        ui.toast.classList.add("show");
+        showToast.timeoutId = window.setTimeout(() => {
+          ui.toast.classList.remove("show");
+        }, 2800);
+      };
+
+      const saveToLocalStorage = (data) => {
+        const payload = {
+          app: "Budżet MSC Pro",
+          month: getCurrentMonth(),
+          savedAt: new Date().toISOString(),
+          data
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      };
+
+      // Wykres kołowy jest rysowany natywnie na canvasie, bez bibliotek zewnętrznych.
+      const drawChart = ({ expenses, savings, free }) => {
+        const canvas = ui.chart;
+        const ctx = canvas.getContext("2d");
+        const width = canvas.width;
+        const height = canvas.height;
+        const center = width / 2;
+        const radius = width * 0.38;
+        const values = [
+          { label: "Wydatki", value: Math.max(expenses, 0), color: chartColors.expenses },
+          { label: "Oszczędności", value: Math.max(savings, 0), color: chartColors.savings },
+          { label: "Wolne środki", value: Math.max(free, 0), color: chartColors.free }
+        ];
+        const total = values.reduce((sum, item) => sum + item.value, 0);
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.34)";
+        ctx.shadowBlur = 26;
+
+        if (total === 0) {
+          ctx.beginPath();
+          ctx.arc(center, center, radius, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+          ctx.lineWidth = 56;
+          ctx.stroke();
+        } else {
+          let start = -Math.PI / 2;
+          values.forEach((item) => {
+            const angle = (item.value / total) * Math.PI * 2;
+            ctx.beginPath();
+            ctx.arc(center, center, radius, start, start + angle);
+            ctx.strokeStyle = item.color;
+            ctx.lineWidth = 58;
+            ctx.lineCap = "round";
+            ctx.stroke();
+            start += angle;
+          });
+        }
+
+        ctx.restore();
+        ctx.beginPath();
+        ctx.arc(center, center, radius - 46, 0, Math.PI * 2);
+        ctx.fillStyle = "#10161f";
+        ctx.fill();
+        ctx.fillStyle = "#f6f8fb";
+        ctx.font = "700 30px Inter, system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("MSC", center, center - 10);
+        ctx.fillStyle = "#a9b3c1";
+        ctx.font = "500 18px Inter, system-ui, sans-serif";
+        ctx.fillText("Pro", center, center + 24);
+      };
+
+      // Centralne przeliczenie całej aplikacji po każdej zmianie danych.
+      const updateUI = () => {
+        const data = getFormData();
+        const totals = calculateTotals(data);
+        const goal = Math.max(data.savingsGoal || 200, 1);
+        const progress = Math.min((totals.savings / goal) * 100, 100);
+
+        setText(ui.metricIncome, formatMoney(totals.income));
+        setText(ui.metricExpenses, formatMoney(totals.expenses));
+        setText(ui.metricSavings, formatMoney(totals.savings));
+        setText(ui.metricFree, formatMoney(totals.free));
+
+        setText(ui.incomeTotal, `Razem: ${formatMoney(totals.income)}`);
+        setText(ui.fixedTotal, `Razem: ${formatMoney(totals.fixedExpenses)}`);
+        setText(ui.otherTotal, `Razem: ${formatMoney(totals.otherExpenses)}`);
+        setText(ui.savingsTotal, `Razem: ${formatMoney(totals.savings)}`);
+
+        setText(ui.summaryIncome, formatMoney(totals.income));
+        setText(ui.summaryExpenses, formatMoney(totals.expenses));
+        setText(ui.summarySavings, formatMoney(totals.savings));
+        setText(ui.summaryFree, formatMoney(totals.free));
+
+        setText(ui.goalPercent, `${Math.round(progress)}%`);
+        setText(ui.goalAmount, `${formatMoney(totals.savings)} z ${formatMoney(goal)}`);
+        ui.goalProgress.style.width = `${progress}%`;
+
+        setText(ui.legendExpenses, formatMoney(totals.expenses));
+        setText(ui.legendSavings, formatMoney(totals.savings));
+        setText(ui.legendFree, formatMoney(totals.free));
+
+        drawChart(totals);
+        saveToLocalStorage(data);
+      };
+
+      const applyData = (data) => {
+        fieldIds.forEach((id) => {
+          const value = parseMoney(data?.[id]);
+          elements[id].value = value ? String(value) : "";
+        });
+
+        if (!elements.savingsGoal.value) {
+          elements.savingsGoal.value = "200";
+        }
+
+        updateUI();
+      };
+
+      // Eksport tworzy plik Budzet_MSC_RRRR-MM.json gotowy do archiwizacji.
+      const exportJson = () => {
+        const month = getCurrentMonth();
+        const payload = {
+          app: "Budżet MSC Pro",
+          version: 1,
+          month,
+          savedAt: new Date().toISOString(),
+          data: getFormData()
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = `Budzet_MSC_${month}.json`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast("💾 Zapisano plik JSON miesiąca");
+      };
+
+      // Import obsługuje pliki zapisane przez aplikację oraz sam obiekt z danymi.
+      const importJson = async (file) => {
+        try {
+          const text = await file.text();
+          const payload = JSON.parse(text);
+          const data = payload.data || payload;
+
+          if (!data || typeof data !== "object") {
+            throw new Error("Nieprawidłowa struktura pliku");
+          }
+
+          applyData(data);
+          showToast("✅ Wczytano poprawnie plik");
+        } catch (error) {
+          showToast("Nie udało się wczytać pliku JSON");
+          console.error("Błąd odczytu pliku budżetu:", error);
+        } finally {
+          ui.fileInput.value = "";
+        }
+      };
+
+      const restoreLastState = () => {
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) {
+          elements.savingsGoal.value = "200";
+          updateUI();
+          return;
+        }
+
+        try {
+          const payload = JSON.parse(saved);
+          applyData(payload.data || payload);
+        } catch (error) {
+          console.warn("Nie udało się przywrócić ostatniego stanu:", error);
+          elements.savingsGoal.value = "200";
+          updateUI();
+        }
+      };
+
+      ui.currentMonth.textContent = getCurrentMonth();
+
+      fieldIds.forEach((id) => {
+        elements[id].addEventListener("input", updateUI);
+      });
+
+      ui.saveBtn.addEventListener("click", exportJson);
+      ui.loadBtn.addEventListener("click", () => ui.fileInput.click());
+      ui.fileInput.addEventListener("change", (event) => {
+        const [file] = event.target.files;
+        if (file) {
+          importJson(file);
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        drawChart(calculateTotals(getFormData()));
+      });
+
+      restoreLastState();
+    })();
+  </script>
 </body>
 </html>
+
