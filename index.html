@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -49,7 +50,8 @@
     }
 
     button,
-    input {
+    input,
+    select {
       font: inherit;
     }
 
@@ -485,13 +487,15 @@
       color: var(--text);
     }
 
-    .goals-layout {
+    .goals-layout,
+    .investments-layout {
       display: grid;
       gap: 18px;
       margin-top: 18px;
     }
 
-    .goals-stats {
+    .goals-stats,
+    .investment-stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
@@ -505,12 +509,21 @@
       padding: 18px 20px 20px;
     }
 
+    .investment-form {
+      display: grid;
+      grid-template-columns: 130px minmax(160px, 1.1fr) minmax(110px, 0.7fr) repeat(5, minmax(110px, 0.7fr)) auto;
+      gap: 12px;
+      align-items: end;
+      padding: 18px 20px 20px;
+    }
+
     .compact-field {
       display: grid;
       gap: 8px;
     }
 
-    .text-input {
+    .text-input,
+    .select-input {
       width: 100%;
       min-height: 44px;
       padding: 10px 12px;
@@ -522,19 +535,28 @@
       transition: border-color 180ms var(--ease), box-shadow 180ms var(--ease);
     }
 
-    .text-input:focus {
+    .select-input {
+      appearance: none;
+    }
+
+    .text-input:focus,
+    .select-input:focus {
       border-color: rgba(62, 224, 209, 0.65);
       box-shadow: 0 0 0 4px rgba(62, 224, 209, 0.1);
     }
 
-    .goals-grid {
+    .goals-grid,
+    .investment-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
       padding: 18px 20px 20px;
     }
 
-    .goal-card {
+    .goal-card,
+    .asset-card,
+    .watch-card,
+    .alert-card {
       display: grid;
       gap: 16px;
       padding: 18px;
@@ -544,25 +566,31 @@
       transition: transform 220ms var(--ease), border-color 220ms var(--ease);
     }
 
-    .goal-card:hover {
+    .goal-card:hover,
+    .asset-card:hover,
+    .watch-card:hover,
+    .alert-card:hover {
       transform: translateY(-2px);
       border-color: var(--line-strong);
     }
 
-    .goal-card-top {
+    .goal-card-top,
+    .asset-card-top {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 14px;
     }
 
-    .goal-name {
+    .goal-name,
+    .asset-name {
       font-size: 1.16rem;
       font-weight: 850;
       overflow-wrap: anywhere;
     }
 
-    .goal-percent {
+    .goal-percent,
+    .asset-pill {
       flex: 0 0 auto;
       padding: 8px 10px;
       border-radius: 999px;
@@ -577,29 +605,67 @@
       gap: 12px;
     }
 
+    .asset-edit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
     .goal-edit-grid .compact-field:first-child {
       grid-column: 1 / -1;
     }
 
-    .goal-meta {
+    .goal-meta,
+    .asset-meta {
       display: grid;
       gap: 8px;
       color: var(--muted);
       font-size: 0.94rem;
     }
 
-    .goal-meta-row {
+    .goal-meta-row,
+    .asset-meta-row {
       display: flex;
       justify-content: space-between;
       gap: 12px;
     }
 
-    .goal-meta strong {
+    .goal-meta strong,
+    .asset-meta strong {
       color: var(--text);
       text-align: right;
     }
 
-    .empty-goals {
+    .investment-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 12px;
+      padding: 18px 20px 20px;
+    }
+
+    .mini-form {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+      gap: 12px;
+      align-items: end;
+      padding: 18px 20px 0;
+    }
+
+    .chart-card-body {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 18px 20px 20px;
+    }
+
+    .empty-goals,
+    .empty-investments {
       padding: 28px;
       border: 1px dashed var(--line-strong);
       border-radius: var(--radius);
@@ -651,7 +717,11 @@
       }
 
       .goals-stats,
-      .goals-grid {
+      .goals-grid,
+      .investment-stats,
+      .investment-grid,
+      .investment-panels,
+      .chart-card-body {
         grid-template-columns: 1fr;
       }
 
@@ -684,7 +754,10 @@
 
       .app-nav,
       .goal-form,
-      .goal-edit-grid {
+      .goal-edit-grid,
+      .investment-form,
+      .asset-edit-grid,
+      .mini-form {
         grid-template-columns: 1fr;
       }
 
@@ -740,6 +813,7 @@
     <nav class="app-nav" aria-label="Menu aplikacji">
       <button class="nav-tab active" id="budgetTab" type="button" data-view="budget">💶 Budżet</button>
       <button class="nav-tab" id="goalsTab" type="button" data-view="goals">🎯 Cele</button>
+      <button class="nav-tab" id="investmentsTab" type="button" data-view="investments">💼 Inwestycje</button>
     </nav>
 
     <section class="app-view active" id="budgetView" aria-label="Widok budżetu">
@@ -966,6 +1040,142 @@
         </section>
       </div>
     </section>
+
+    <section class="app-view" id="investmentsView" aria-label="Widok inwestycji">
+      <div class="investments-layout">
+        <section class="investment-stats" aria-label="Statystyki portfela">
+          <article class="metric-card" style="--accent: var(--cyan);">
+            <div class="metric-label"><span>Wartość portfela</span><span class="metric-icon">€</span></div>
+            <div class="metric-value" id="investmentPortfolioValue">0 €</div>
+            <p class="metric-note">Suma aktualnych wartości</p>
+          </article>
+          <article class="metric-card" style="--accent: var(--green);">
+            <div class="metric-label"><span>Zysk / strata</span><span class="metric-icon">↕</span></div>
+            <div class="metric-value" id="investmentProfit">0 €</div>
+            <p class="metric-note" id="investmentReturn">Zwrot 0%</p>
+          </article>
+          <article class="metric-card" style="--accent: var(--purple);">
+            <div class="metric-label"><span>Aktywa</span><span class="metric-icon">◇</span></div>
+            <div class="metric-value" id="investmentAssetsCount">0</div>
+            <p class="metric-note">Pozycje w portfelu</p>
+          </article>
+        </section>
+
+        <section class="section-card" aria-labelledby="portfolioTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="portfolioTitle">Portfel</h2>
+            <span class="section-total">ETF, akcje i kryptowaluty</span>
+          </div>
+          <div class="investment-form">
+            <div class="compact-field">
+              <label for="newAssetType">Typ</label>
+              <select class="select-input" id="newAssetType">
+                <option value="ETF">ETF</option>
+                <option value="Akcja">Akcja</option>
+                <option value="Krypto">Krypto</option>
+              </select>
+            </div>
+            <div class="compact-field">
+              <label for="newAssetName">Nazwa</label>
+              <input class="text-input" id="newAssetName" type="text" placeholder="S&P 500 ETF">
+            </div>
+            <div class="compact-field">
+              <label for="newAssetTicker">Ticker</label>
+              <input class="text-input" id="newAssetTicker" type="text" placeholder="VUAA">
+            </div>
+            <div class="compact-field">
+              <label for="newAssetQuantity">Ilość</label>
+              <input class="money-input" id="newAssetQuantity" type="number" min="0" step="0.000001" inputmode="decimal" placeholder="1">
+            </div>
+            <div class="compact-field">
+              <label for="newAssetAvgPrice">Śr. zakup</label>
+              <input class="money-input" id="newAssetAvgPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="100">
+            </div>
+            <div class="compact-field">
+              <label for="newAssetCurrentPrice">Akt. cena</label>
+              <input class="money-input" id="newAssetCurrentPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="120">
+            </div>
+            <div class="compact-field">
+              <label for="newAssetHighPrice">Szczyt</label>
+              <input class="money-input" id="newAssetHighPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="130">
+            </div>
+            <div class="compact-field">
+              <label for="newAssetLowPrice">Dołek</label>
+              <input class="money-input" id="newAssetLowPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="90">
+            </div>
+            <button class="action-btn" id="addAssetBtn" type="button">➕ Dodaj</button>
+          </div>
+          <div class="investment-grid" id="portfolioList"></div>
+        </section>
+
+        <section class="section-card" aria-labelledby="portfolioChartTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="portfolioChartTitle">Udział aktywów</h2>
+            <span class="section-total">Wykres kołowy portfela</span>
+          </div>
+          <div class="chart-card-body">
+            <canvas id="investmentsChart" width="420" height="420" aria-label="Wykres udziału aktywów" role="img"></canvas>
+            <div class="legend" id="investmentLegend"></div>
+          </div>
+        </section>
+
+        <div class="investment-panels">
+          <section class="section-card" aria-labelledby="watchlistTitle">
+            <div class="section-header">
+              <h2 class="section-title" id="watchlistTitle">Watchlista</h2>
+              <span class="section-total">Instrumenty obserwowane</span>
+            </div>
+            <div class="mini-form">
+              <div class="compact-field">
+                <label for="watchName">Nazwa</label>
+                <input class="text-input" id="watchName" type="text" placeholder="Bitcoin">
+              </div>
+              <div class="compact-field">
+                <label for="watchTicker">Ticker</label>
+                <input class="text-input" id="watchTicker" type="text" placeholder="BTC">
+              </div>
+              <div class="compact-field">
+                <label for="watchType">Typ</label>
+                <select class="select-input" id="watchType">
+                  <option value="ETF">ETF</option>
+                  <option value="Akcja">Akcja</option>
+                  <option value="Krypto">Krypto</option>
+                </select>
+              </div>
+              <button class="action-btn" id="addWatchBtn" type="button">➕ Dodaj</button>
+            </div>
+            <div class="mini-list" id="watchlistItems"></div>
+          </section>
+
+          <section class="section-card" aria-labelledby="alertsTitle">
+            <div class="section-header">
+              <h2 class="section-title" id="alertsTitle">Alerty</h2>
+              <span class="section-total">Cena, spadek lub wzrost</span>
+            </div>
+            <div class="mini-form">
+              <div class="compact-field">
+                <label for="alertTicker">Ticker</label>
+                <input class="text-input" id="alertTicker" type="text" placeholder="AAPL">
+              </div>
+              <div class="compact-field">
+                <label for="alertType">Typ alertu</label>
+                <select class="select-input" id="alertType">
+                  <option value="price">Cena</option>
+                  <option value="drop">Spadek %</option>
+                  <option value="rise">Wzrost %</option>
+                </select>
+              </div>
+              <div class="compact-field">
+                <label for="alertValue">Wartość</label>
+                <input class="money-input" id="alertValue" type="number" min="0" step="0.01" inputmode="decimal" placeholder="100">
+              </div>
+              <button class="action-btn" id="addAlertBtn" type="button">➕ Dodaj</button>
+            </div>
+            <div class="mini-list" id="alertItems"></div>
+          </section>
+        </div>
+      </div>
+    </section>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -977,6 +1187,7 @@
       // Stały klucz localStorage pozwala odtworzyć ostatni stan po ponownym otwarciu strony.
       const STORAGE_KEY = "budzet-msc-pro-state";
       const GOALS_STORAGE_KEY = "budzet-msc-pro-goals";
+      const INVESTMENTS_STORAGE_KEY = "budzet-msc-pro-investments";
       const fieldIds = [
         "salary",
         "kindergeld",
@@ -1038,8 +1249,10 @@
         fileInput: document.getElementById("fileInput"),
         budgetTab: document.getElementById("budgetTab"),
         goalsTab: document.getElementById("goalsTab"),
+        investmentsTab: document.getElementById("investmentsTab"),
         budgetView: document.getElementById("budgetView"),
         goalsView: document.getElementById("goalsView"),
+        investmentsView: document.getElementById("investmentsView"),
         goalsCount: document.getElementById("goalsCount"),
         goalsTargetSum: document.getElementById("goalsTargetSum"),
         goalsCurrentSum: document.getElementById("goalsCurrentSum"),
@@ -1049,11 +1262,42 @@
         newGoalTarget: document.getElementById("newGoalTarget"),
         newGoalCurrent: document.getElementById("newGoalCurrent"),
         addGoalBtn: document.getElementById("addGoalBtn"),
+        investmentPortfolioValue: document.getElementById("investmentPortfolioValue"),
+        investmentProfit: document.getElementById("investmentProfit"),
+        investmentReturn: document.getElementById("investmentReturn"),
+        investmentAssetsCount: document.getElementById("investmentAssetsCount"),
+        portfolioList: document.getElementById("portfolioList"),
+        investmentsChart: document.getElementById("investmentsChart"),
+        investmentLegend: document.getElementById("investmentLegend"),
+        newAssetType: document.getElementById("newAssetType"),
+        newAssetName: document.getElementById("newAssetName"),
+        newAssetTicker: document.getElementById("newAssetTicker"),
+        newAssetQuantity: document.getElementById("newAssetQuantity"),
+        newAssetAvgPrice: document.getElementById("newAssetAvgPrice"),
+        newAssetCurrentPrice: document.getElementById("newAssetCurrentPrice"),
+        newAssetHighPrice: document.getElementById("newAssetHighPrice"),
+        newAssetLowPrice: document.getElementById("newAssetLowPrice"),
+        addAssetBtn: document.getElementById("addAssetBtn"),
+        watchName: document.getElementById("watchName"),
+        watchTicker: document.getElementById("watchTicker"),
+        watchType: document.getElementById("watchType"),
+        addWatchBtn: document.getElementById("addWatchBtn"),
+        watchlistItems: document.getElementById("watchlistItems"),
+        alertTicker: document.getElementById("alertTicker"),
+        alertType: document.getElementById("alertType"),
+        alertValue: document.getElementById("alertValue"),
+        addAlertBtn: document.getElementById("addAlertBtn"),
+        alertItems: document.getElementById("alertItems"),
         toast: document.getElementById("toast"),
         chart: document.getElementById("budgetChart")
       };
 
       let savingsGoals = [];
+      let investmentsState = {
+        portfolio: [],
+        watchlist: [],
+        alerts: []
+      };
 
       // Formatowanie zachowuje polski zapis waluty i usuwa niepotrzebne grosze.
       const formatMoney = (value) => {
@@ -1064,6 +1308,14 @@
           minimumFractionDigits: normalized % 1 === 0 ? 0 : 2,
           maximumFractionDigits: 2
         }).format(normalized);
+      };
+
+      const formatPercent = (value) => {
+        const normalized = Math.abs(value) < 0.005 ? 0 : value;
+        return `${new Intl.NumberFormat("pl-PL", {
+          minimumFractionDigits: normalized % 1 === 0 ? 0 : 2,
+          maximumFractionDigits: 2
+        }).format(normalized)}%`;
       };
 
       const parseMoney = (value) => {
@@ -1327,18 +1579,29 @@
       };
 
       const setActiveView = (viewName) => {
+        const showBudget = viewName === "budget";
         const showGoals = viewName === "goals";
+        const showInvestments = viewName === "investments";
 
-        ui.budgetTab.classList.toggle("active", !showGoals);
+        ui.budgetTab.classList.toggle("active", showBudget);
         ui.goalsTab.classList.toggle("active", showGoals);
-        ui.budgetView.classList.toggle("active", !showGoals);
+        ui.investmentsTab.classList.toggle("active", showInvestments);
+        ui.budgetView.classList.toggle("active", showBudget);
         ui.goalsView.classList.toggle("active", showGoals);
-        ui.budgetTab.setAttribute("aria-selected", String(!showGoals));
+        ui.investmentsView.classList.toggle("active", showInvestments);
+        ui.budgetTab.setAttribute("aria-selected", String(showBudget));
         ui.goalsTab.setAttribute("aria-selected", String(showGoals));
+        ui.investmentsTab.setAttribute("aria-selected", String(showInvestments));
 
         if (showGoals) {
           renderGoals();
-        } else {
+        }
+
+        if (showInvestments) {
+          renderInvestments();
+        }
+
+        if (showBudget) {
           drawChart(calculateTotals(getFormData()));
         }
       };
@@ -1356,6 +1619,419 @@
         ui.newGoalCurrent.value = "";
         persistAndRenderGoals();
         showToast("🎯 Dodano nowy cel");
+      };
+
+      const normalizeAsset = (asset) => ({
+        id: asset.id || makeGoalId(),
+        type: ["ETF", "Akcja", "Krypto"].includes(asset.type) ? asset.type : "ETF",
+        name: String(asset.name || "Nowe aktywo").trim() || "Nowe aktywo",
+        ticker: String(asset.ticker || "").trim().toUpperCase(),
+        quantity: parseMoney(asset.quantity),
+        avgPrice: parseMoney(asset.avgPrice),
+        currentPrice: parseMoney(asset.currentPrice),
+        highPrice: parseMoney(asset.highPrice),
+        lowPrice: parseMoney(asset.lowPrice),
+        createdAt: asset.createdAt || new Date().toISOString()
+      });
+
+      const normalizeWatchItem = (item) => ({
+        id: item.id || makeGoalId(),
+        type: ["ETF", "Akcja", "Krypto"].includes(item.type) ? item.type : "ETF",
+        name: String(item.name || "Obserwowany instrument").trim() || "Obserwowany instrument",
+        ticker: String(item.ticker || "").trim().toUpperCase(),
+        createdAt: item.createdAt || new Date().toISOString()
+      });
+
+      const normalizeAlert = (alert) => ({
+        id: alert.id || makeGoalId(),
+        ticker: String(alert.ticker || "").trim().toUpperCase(),
+        type: ["price", "drop", "rise"].includes(alert.type) ? alert.type : "price",
+        value: parseMoney(alert.value),
+        createdAt: alert.createdAt || new Date().toISOString()
+      });
+
+      const getAssetStats = (asset) => {
+        const cost = asset.quantity * asset.avgPrice;
+        const value = asset.quantity * asset.currentPrice;
+        const profit = value - cost;
+        const returnPercent = cost > 0 ? (profit / cost) * 100 : 0;
+        const dropFromHigh = asset.highPrice > 0 ? ((asset.currentPrice - asset.highPrice) / asset.highPrice) * 100 : 0;
+        const riseFromLow = asset.lowPrice > 0 ? ((asset.currentPrice - asset.lowPrice) / asset.lowPrice) * 100 : 0;
+
+        return { cost, value, profit, returnPercent, dropFromHigh, riseFromLow };
+      };
+
+      const getPortfolioTotals = () => {
+        return investmentsState.portfolio.reduce((totals, asset) => {
+          const stats = getAssetStats(asset);
+          totals.cost += stats.cost;
+          totals.value += stats.value;
+          totals.profit += stats.profit;
+          return totals;
+        }, { cost: 0, value: 0, profit: 0 });
+      };
+
+      const saveInvestmentsToLocalStorage = () => {
+        const payload = {
+          app: "Budżet MSC Pro",
+          savedAt: new Date().toISOString(),
+          investments: investmentsState
+        };
+        localStorage.setItem(INVESTMENTS_STORAGE_KEY, JSON.stringify(payload));
+      };
+
+      const createInvestmentInput = ({ labelText, type, value, assetId, field, className }) => {
+        const wrapper = document.createElement("div");
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+
+        wrapper.className = "compact-field";
+        label.textContent = labelText;
+        input.className = className;
+        input.type = type;
+        input.value = value;
+        input.dataset.assetId = assetId;
+        input.dataset.assetField = field;
+
+        if (type === "number") {
+          input.min = "0";
+          input.step = field === "quantity" ? "0.000001" : "0.01";
+          input.inputMode = "decimal";
+        }
+
+        wrapper.append(label, input);
+        return wrapper;
+      };
+
+      const drawInvestmentsChart = () => {
+        const canvas = ui.investmentsChart;
+        const ctx = canvas.getContext("2d");
+        const width = canvas.width;
+        const center = width / 2;
+        const radius = width * 0.38;
+        const palette = ["#3ee0d1", "#a96cff", "#24d178", "#f6c451", "#ff5e73", "#4fb6ff"];
+        const values = investmentsState.portfolio
+          .map((asset, index) => ({
+            label: asset.ticker || asset.name,
+            value: Math.max(getAssetStats(asset).value, 0),
+            color: palette[index % palette.length]
+          }))
+          .filter((item) => item.value > 0);
+        const total = values.reduce((sum, item) => sum + item.value, 0);
+
+        ctx.clearRect(0, 0, width, canvas.height);
+        ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.34)";
+        ctx.shadowBlur = 26;
+
+        if (total === 0) {
+          ctx.beginPath();
+          ctx.arc(center, center, radius, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+          ctx.lineWidth = 56;
+          ctx.stroke();
+        } else {
+          let start = -Math.PI / 2;
+          values.forEach((item) => {
+            const angle = (item.value / total) * Math.PI * 2;
+            ctx.beginPath();
+            ctx.arc(center, center, radius, start, start + angle);
+            ctx.strokeStyle = item.color;
+            ctx.lineWidth = 58;
+            ctx.lineCap = "round";
+            ctx.stroke();
+            start += angle;
+          });
+        }
+
+        ctx.restore();
+        ctx.beginPath();
+        ctx.arc(center, center, radius - 46, 0, Math.PI * 2);
+        ctx.fillStyle = "#10161f";
+        ctx.fill();
+        ctx.fillStyle = "#f6f8fb";
+        ctx.font = "700 28px Inter, system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("PORT", center, center - 10);
+        ctx.fillStyle = "#a9b3c1";
+        ctx.font = "500 17px Inter, system-ui, sans-serif";
+        ctx.fillText("folio", center, center + 22);
+
+        ui.investmentLegend.innerHTML = "";
+        if (values.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "empty-investments";
+          empty.textContent = "Dodaj aktywa, aby zobaczyć udział w portfelu.";
+          ui.investmentLegend.append(empty);
+          return;
+        }
+
+        values.forEach((item) => {
+          const row = document.createElement("div");
+          const dot = document.createElement("span");
+          const label = document.createElement("span");
+          const value = document.createElement("strong");
+
+          row.className = "legend-item";
+          dot.className = "dot";
+          dot.style.setProperty("--dot", item.color);
+          label.textContent = item.label;
+          value.textContent = formatMoney(item.value);
+          row.append(dot, label, value);
+          ui.investmentLegend.append(row);
+        });
+      };
+
+      const updateInvestmentStats = () => {
+        const totals = getPortfolioTotals();
+        const returnPercent = totals.cost > 0 ? (totals.profit / totals.cost) * 100 : 0;
+
+        setText(ui.investmentPortfolioValue, formatMoney(totals.value));
+        setText(ui.investmentProfit, formatMoney(totals.profit));
+        setText(ui.investmentReturn, `Zwrot ${formatPercent(returnPercent)}`);
+        setText(ui.investmentAssetsCount, String(investmentsState.portfolio.length));
+        drawInvestmentsChart();
+      };
+
+      const updateVisibleAssetCard = (assetId) => {
+        const asset = investmentsState.portfolio.find((item) => item.id === assetId);
+        const card = [...ui.portfolioList.children].find((item) => item.dataset.assetId === assetId);
+
+        if (!asset || !card) {
+          return;
+        }
+
+        const stats = getAssetStats(asset);
+        card.querySelector('[data-asset-part="name"]').textContent = `${asset.name} ${asset.ticker ? `(${asset.ticker})` : ""}`;
+        card.querySelector('[data-asset-part="type"]').textContent = asset.type;
+        card.querySelector('[data-asset-part="meta"]').innerHTML = `
+          <div class="asset-meta-row"><span>Aktualna wartość</span><strong>${formatMoney(stats.value)}</strong></div>
+          <div class="asset-meta-row"><span>Zysk / strata</span><strong>${formatMoney(stats.profit)}</strong></div>
+          <div class="asset-meta-row"><span>Zwrot</span><strong>${formatPercent(stats.returnPercent)}</strong></div>
+          <div class="asset-meta-row"><span>Spadek od szczytu</span><strong>${formatPercent(stats.dropFromHigh)}</strong></div>
+          <div class="asset-meta-row"><span>Wzrost od dołka</span><strong>${formatPercent(stats.riseFromLow)}</strong></div>
+        `;
+      };
+
+      const renderPortfolio = () => {
+        ui.portfolioList.innerHTML = "";
+
+        if (investmentsState.portfolio.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "empty-investments";
+          empty.textContent = "Brak aktywów w portfelu. Dodaj ETF, akcję albo kryptowalutę.";
+          ui.portfolioList.append(empty);
+          updateInvestmentStats();
+          return;
+        }
+
+        investmentsState.portfolio.forEach((asset) => {
+          const stats = getAssetStats(asset);
+          const card = document.createElement("article");
+          const top = document.createElement("div");
+          const title = document.createElement("h3");
+          const type = document.createElement("span");
+          const editGrid = document.createElement("div");
+          const meta = document.createElement("div");
+          const removeBtn = document.createElement("button");
+
+          card.className = "asset-card";
+          card.dataset.assetId = asset.id;
+          top.className = "asset-card-top";
+          title.className = "asset-name";
+          title.dataset.assetPart = "name";
+          title.textContent = `${asset.name} ${asset.ticker ? `(${asset.ticker})` : ""}`;
+          type.className = "asset-pill";
+          type.dataset.assetPart = "type";
+          type.textContent = asset.type;
+
+          editGrid.className = "asset-edit-grid";
+          editGrid.append(
+            createInvestmentInput({ labelText: "Nazwa", type: "text", value: asset.name, assetId: asset.id, field: "name", className: "text-input" }),
+            createInvestmentInput({ labelText: "Ticker", type: "text", value: asset.ticker, assetId: asset.id, field: "ticker", className: "text-input" }),
+            createInvestmentInput({ labelText: "Ilość", type: "number", value: asset.quantity, assetId: asset.id, field: "quantity", className: "money-input" }),
+            createInvestmentInput({ labelText: "Śr. zakup", type: "number", value: asset.avgPrice, assetId: asset.id, field: "avgPrice", className: "money-input" }),
+            createInvestmentInput({ labelText: "Akt. cena", type: "number", value: asset.currentPrice, assetId: asset.id, field: "currentPrice", className: "money-input" }),
+            createInvestmentInput({ labelText: "Szczyt", type: "number", value: asset.highPrice, assetId: asset.id, field: "highPrice", className: "money-input" }),
+            createInvestmentInput({ labelText: "Dołek", type: "number", value: asset.lowPrice, assetId: asset.id, field: "lowPrice", className: "money-input" })
+          );
+
+          meta.className = "asset-meta";
+          meta.dataset.assetPart = "meta";
+          meta.innerHTML = `
+            <div class="asset-meta-row"><span>Aktualna wartość</span><strong>${formatMoney(stats.value)}</strong></div>
+            <div class="asset-meta-row"><span>Zysk / strata</span><strong>${formatMoney(stats.profit)}</strong></div>
+            <div class="asset-meta-row"><span>Zwrot</span><strong>${formatPercent(stats.returnPercent)}</strong></div>
+            <div class="asset-meta-row"><span>Spadek od szczytu</span><strong>${formatPercent(stats.dropFromHigh)}</strong></div>
+            <div class="asset-meta-row"><span>Wzrost od dołka</span><strong>${formatPercent(stats.riseFromLow)}</strong></div>
+          `;
+
+          removeBtn.className = "action-btn ghost";
+          removeBtn.type = "button";
+          removeBtn.dataset.removeAssetId = asset.id;
+          removeBtn.textContent = "Usuń aktywo";
+
+          top.append(title, type);
+          card.append(top, editGrid, meta, removeBtn);
+          ui.portfolioList.append(card);
+        });
+
+        updateInvestmentStats();
+      };
+
+      const renderWatchlist = () => {
+        ui.watchlistItems.innerHTML = "";
+
+        if (investmentsState.watchlist.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "empty-investments";
+          empty.textContent = "Watchlista jest pusta.";
+          ui.watchlistItems.append(empty);
+          return;
+        }
+
+        investmentsState.watchlist.forEach((item) => {
+          const card = document.createElement("article");
+          const title = document.createElement("h3");
+          const meta = document.createElement("div");
+          const removeBtn = document.createElement("button");
+
+          card.className = "watch-card";
+          title.className = "asset-name";
+          title.textContent = `${item.name} ${item.ticker ? `(${item.ticker})` : ""}`;
+          meta.className = "asset-meta";
+          meta.innerHTML = `<div class="asset-meta-row"><span>Typ</span><strong>${item.type}</strong></div>`;
+          removeBtn.className = "action-btn ghost";
+          removeBtn.type = "button";
+          removeBtn.dataset.removeWatchId = item.id;
+          removeBtn.textContent = "Usuń";
+          card.append(title, meta, removeBtn);
+          ui.watchlistItems.append(card);
+        });
+      };
+
+      const renderAlerts = () => {
+        const labels = {
+          price: "Alert ceny",
+          drop: "Alert procentowego spadku",
+          rise: "Alert procentowego wzrostu"
+        };
+        ui.alertItems.innerHTML = "";
+
+        if (investmentsState.alerts.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "empty-investments";
+          empty.textContent = "Brak ustawionych alertów.";
+          ui.alertItems.append(empty);
+          return;
+        }
+
+        investmentsState.alerts.forEach((alert) => {
+          const card = document.createElement("article");
+          const title = document.createElement("h3");
+          const meta = document.createElement("div");
+          const removeBtn = document.createElement("button");
+          const formattedValue = alert.type === "price" ? formatMoney(alert.value) : formatPercent(alert.value);
+
+          card.className = "alert-card";
+          title.className = "asset-name";
+          title.textContent = alert.ticker || "Instrument";
+          meta.className = "asset-meta";
+          meta.innerHTML = `
+            <div class="asset-meta-row"><span>Typ</span><strong>${labels[alert.type]}</strong></div>
+            <div class="asset-meta-row"><span>Wartość</span><strong>${formattedValue}</strong></div>
+          `;
+          removeBtn.className = "action-btn ghost";
+          removeBtn.type = "button";
+          removeBtn.dataset.removeAlertId = alert.id;
+          removeBtn.textContent = "Usuń";
+          card.append(title, meta, removeBtn);
+          ui.alertItems.append(card);
+        });
+      };
+
+      const renderInvestments = () => {
+        renderPortfolio();
+        renderWatchlist();
+        renderAlerts();
+      };
+
+      const persistAndRenderInvestments = () => {
+        saveInvestmentsToLocalStorage();
+        renderInvestments();
+      };
+
+      const restoreInvestments = () => {
+        const saved = localStorage.getItem(INVESTMENTS_STORAGE_KEY);
+
+        if (!saved) {
+          renderInvestments();
+          return;
+        }
+
+        try {
+          const payload = JSON.parse(saved);
+          const data = payload.investments || {};
+          investmentsState = {
+            portfolio: Array.isArray(data.portfolio) ? data.portfolio.map(normalizeAsset) : [],
+            watchlist: Array.isArray(data.watchlist) ? data.watchlist.map(normalizeWatchItem) : [],
+            alerts: Array.isArray(data.alerts) ? data.alerts.map(normalizeAlert) : []
+          };
+          renderInvestments();
+        } catch (error) {
+          console.warn("Nie udało się przywrócić inwestycji:", error);
+          investmentsState = { portfolio: [], watchlist: [], alerts: [] };
+          renderInvestments();
+        }
+      };
+
+      const addAsset = () => {
+        const asset = normalizeAsset({
+          type: ui.newAssetType.value,
+          name: ui.newAssetName.value,
+          ticker: ui.newAssetTicker.value,
+          quantity: ui.newAssetQuantity.value,
+          avgPrice: ui.newAssetAvgPrice.value,
+          currentPrice: ui.newAssetCurrentPrice.value,
+          highPrice: ui.newAssetHighPrice.value,
+          lowPrice: ui.newAssetLowPrice.value
+        });
+
+        investmentsState.portfolio.push(asset);
+        [ui.newAssetName, ui.newAssetTicker, ui.newAssetQuantity, ui.newAssetAvgPrice, ui.newAssetCurrentPrice, ui.newAssetHighPrice, ui.newAssetLowPrice].forEach((input) => {
+          input.value = "";
+        });
+        persistAndRenderInvestments();
+        showToast("💼 Dodano aktywo");
+      };
+
+      const addWatchItem = () => {
+        const item = normalizeWatchItem({
+          type: ui.watchType.value,
+          name: ui.watchName.value,
+          ticker: ui.watchTicker.value
+        });
+
+        investmentsState.watchlist.push(item);
+        ui.watchName.value = "";
+        ui.watchTicker.value = "";
+        persistAndRenderInvestments();
+        showToast("Dodano do watchlisty");
+      };
+
+      const addAlert = () => {
+        const alert = normalizeAlert({
+          ticker: ui.alertTicker.value,
+          type: ui.alertType.value,
+          value: ui.alertValue.value
+        });
+
+        investmentsState.alerts.push(alert);
+        ui.alertTicker.value = "";
+        ui.alertValue.value = "";
+        persistAndRenderInvestments();
+        showToast("Dodano alert");
       };
 
       // Wykres kołowy jest rysowany natywnie na canvasie, bez bibliotek zewnętrznych.
@@ -1531,6 +2207,7 @@
 
       ui.budgetTab.addEventListener("click", () => setActiveView("budget"));
       ui.goalsTab.addEventListener("click", () => setActiveView("goals"));
+      ui.investmentsTab.addEventListener("click", () => setActiveView("investments"));
       ui.addGoalBtn.addEventListener("click", addGoal);
       ui.goalsList.addEventListener("input", (event) => {
         const input = event.target;
@@ -1567,6 +2244,64 @@
         showToast("Usunięto cel");
       });
 
+      ui.addAssetBtn.addEventListener("click", addAsset);
+      ui.addWatchBtn.addEventListener("click", addWatchItem);
+      ui.addAlertBtn.addEventListener("click", addAlert);
+      ui.portfolioList.addEventListener("input", (event) => {
+        const input = event.target;
+        const assetId = input.dataset.assetId;
+        const field = input.dataset.assetField;
+
+        if (!assetId || !field) {
+          return;
+        }
+
+        investmentsState.portfolio = investmentsState.portfolio.map((asset) => {
+          if (asset.id !== assetId) {
+            return asset;
+          }
+
+          const nextAsset = { ...asset };
+          nextAsset[field] = ["name", "ticker"].includes(field) ? input.value : parseMoney(input.value);
+          return normalizeAsset(nextAsset);
+        });
+
+        saveInvestmentsToLocalStorage();
+        updateInvestmentStats();
+        updateVisibleAssetCard(assetId);
+      });
+      ui.portfolioList.addEventListener("click", (event) => {
+        const assetId = event.target.dataset.removeAssetId;
+
+        if (!assetId) {
+          return;
+        }
+
+        investmentsState.portfolio = investmentsState.portfolio.filter((asset) => asset.id !== assetId);
+        persistAndRenderInvestments();
+        showToast("Usunięto aktywo");
+      });
+      ui.watchlistItems.addEventListener("click", (event) => {
+        const watchId = event.target.dataset.removeWatchId;
+
+        if (!watchId) {
+          return;
+        }
+
+        investmentsState.watchlist = investmentsState.watchlist.filter((item) => item.id !== watchId);
+        persistAndRenderInvestments();
+      });
+      ui.alertItems.addEventListener("click", (event) => {
+        const alertId = event.target.dataset.removeAlertId;
+
+        if (!alertId) {
+          return;
+        }
+
+        investmentsState.alerts = investmentsState.alerts.filter((alert) => alert.id !== alertId);
+        persistAndRenderInvestments();
+      });
+
       ui.saveBtn.addEventListener("click", exportJson);
       ui.loadBtn.addEventListener("click", () => ui.fileInput.click());
       ui.fileInput.addEventListener("change", (event) => {
@@ -1582,8 +2317,8 @@
 
       restoreLastState();
       restoreGoals();
+      restoreInvestments();
     })();
   </script>
 </body>
 </html>
-
