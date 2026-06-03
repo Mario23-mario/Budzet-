@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -121,6 +120,57 @@
       margin-top: 4px;
       color: var(--text);
       font-size: 1.2rem;
+    }
+
+    .app-nav {
+      display: inline-flex;
+      gap: 8px;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.055);
+      box-shadow: var(--shadow);
+    }
+
+    .nav-tab {
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 15px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 820;
+      transition: color 180ms var(--ease), background 180ms var(--ease), transform 180ms var(--ease);
+    }
+
+    .nav-tab:hover {
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .nav-tab.active {
+      color: #071015;
+      background: linear-gradient(135deg, #f6f8fb, #b9c8da);
+    }
+
+    .app-view {
+      display: none;
+    }
+
+    .app-view.active {
+      display: block;
+      animation: viewIn 260ms var(--ease);
+    }
+
+    @keyframes viewIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Kafelki dashboardu automatycznie odświeżają się po zmianie pól. */
@@ -422,6 +472,142 @@
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
+    .action-btn.ghost {
+      min-height: 42px;
+      padding: 10px 12px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .action-btn.ghost:hover {
+      color: var(--text);
+    }
+
+    .goals-layout {
+      display: grid;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .goals-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .goal-form {
+      display: grid;
+      grid-template-columns: minmax(180px, 1.2fr) minmax(130px, 0.7fr) minmax(130px, 0.7fr) auto;
+      gap: 12px;
+      align-items: end;
+      padding: 18px 20px 20px;
+    }
+
+    .compact-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .text-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      outline: 0;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      transition: border-color 180ms var(--ease), box-shadow 180ms var(--ease);
+    }
+
+    .text-input:focus {
+      border-color: rgba(62, 224, 209, 0.65);
+      box-shadow: 0 0 0 4px rgba(62, 224, 209, 0.1);
+    }
+
+    .goals-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px 20px 20px;
+    }
+
+    .goal-card {
+      display: grid;
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.085);
+      border-radius: var(--radius);
+      background: rgba(7, 11, 16, 0.42);
+      transition: transform 220ms var(--ease), border-color 220ms var(--ease);
+    }
+
+    .goal-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+    }
+
+    .goal-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .goal-name {
+      font-size: 1.16rem;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .goal-percent {
+      flex: 0 0 auto;
+      padding: 8px 10px;
+      border-radius: 999px;
+      color: #071015;
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      font-weight: 850;
+    }
+
+    .goal-edit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .goal-edit-grid .compact-field:first-child {
+      grid-column: 1 / -1;
+    }
+
+    .goal-meta {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .goal-meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .goal-meta strong {
+      color: var(--text);
+      text-align: right;
+    }
+
+    .empty-goals {
+      padding: 28px;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+      background: rgba(7, 11, 16, 0.34);
+    }
+
     /* Krótki komunikat statusu dla zapisu i odczytu plików. */
     .toast {
       position: fixed;
@@ -464,6 +650,11 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
+      .goals-stats,
+      .goals-grid {
+        grid-template-columns: 1fr;
+      }
+
       .main-grid {
         grid-template-columns: 1fr;
       }
@@ -489,6 +680,16 @@
 
       .dashboard {
         grid-template-columns: 1fr;
+      }
+
+      .app-nav,
+      .goal-form,
+      .goal-edit-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .app-nav {
+        display: grid;
       }
 
       .field-row {
@@ -536,49 +737,55 @@
       </aside>
     </header>
 
-    <!-- Dashboard z czterema najważniejszymi wartościami miesiąca. -->
-    <section class="dashboard" aria-label="Dashboard budżetu">
-      <article class="metric-card" style="--accent: var(--green);">
-        <div class="metric-label"><span>🟢 Przychody</span><span class="metric-icon">€</span></div>
-        <div class="metric-value" id="metricIncome">0 €</div>
-        <p class="metric-note">Wpływy miesięczne</p>
-      </article>
-      <article class="metric-card" style="--accent: var(--red);">
-        <div class="metric-label"><span>🔴 Wydatki</span><span class="metric-icon">−</span></div>
-        <div class="metric-value" id="metricExpenses">0 €</div>
-        <p class="metric-note">Stałe i inne koszty</p>
-      </article>
-      <article class="metric-card" style="--accent: var(--purple);">
-        <div class="metric-label"><span>🟣 Oszczędności</span><span class="metric-icon">↗</span></div>
-        <div class="metric-value" id="metricSavings">0 €</div>
-        <p class="metric-note">BTC, ETF i rezerwa</p>
-      </article>
-      <article class="metric-card" style="--accent: var(--blue);">
-        <div class="metric-label"><span>🔵 Wolne środki</span><span class="metric-icon">≈</span></div>
-        <div class="metric-value" id="metricFree">0 €</div>
-        <p class="metric-note">Po wszystkich pozycjach</p>
-      </article>
-    </section>
+    <nav class="app-nav" aria-label="Menu aplikacji">
+      <button class="nav-tab active" id="budgetTab" type="button" data-view="budget">💶 Budżet</button>
+      <button class="nav-tab" id="goalsTab" type="button" data-view="goals">🎯 Cele</button>
+    </nav>
 
-    <div class="main-grid">
-      <div class="stack">
-        <!-- Przychody, wydatki i oszczędności są podzielone na czytelne sekcje formularza. -->
-        <section class="section-card" aria-labelledby="incomeTitle">
-          <div class="section-header">
-            <h2 class="section-title" id="incomeTitle">Przychody</h2>
-            <span class="section-total" id="incomeTotal">Razem: 0 €</span>
-          </div>
-          <div class="fields">
-            <div class="field-row">
-              <label for="salary">Twoja wypłata</label>
-              <input class="money-input" id="salary" data-category="income" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+    <section class="app-view active" id="budgetView" aria-label="Widok budżetu">
+      <!-- Dashboard z czterema najważniejszymi wartościami miesiąca. -->
+      <section class="dashboard" aria-label="Dashboard budżetu">
+        <article class="metric-card" style="--accent: var(--green);">
+          <div class="metric-label"><span>🟢 Przychody</span><span class="metric-icon">€</span></div>
+          <div class="metric-value" id="metricIncome">0 €</div>
+          <p class="metric-note">Wpływy miesięczne</p>
+        </article>
+        <article class="metric-card" style="--accent: var(--red);">
+          <div class="metric-label"><span>🔴 Wydatki</span><span class="metric-icon">−</span></div>
+          <div class="metric-value" id="metricExpenses">0 €</div>
+          <p class="metric-note">Stałe i inne koszty</p>
+        </article>
+        <article class="metric-card" style="--accent: var(--purple);">
+          <div class="metric-label"><span>🟣 Oszczędności</span><span class="metric-icon">↗</span></div>
+          <div class="metric-value" id="metricSavings">0 €</div>
+          <p class="metric-note">BTC, ETF i rezerwa</p>
+        </article>
+        <article class="metric-card" style="--accent: var(--blue);">
+          <div class="metric-label"><span>🔵 Wolne środki</span><span class="metric-icon">≈</span></div>
+          <div class="metric-value" id="metricFree">0 €</div>
+          <p class="metric-note">Po wszystkich pozycjach</p>
+        </article>
+      </section>
+
+      <div class="main-grid">
+        <div class="stack">
+          <!-- Przychody, wydatki i oszczędności są podzielone na czytelne sekcje formularza. -->
+          <section class="section-card" aria-labelledby="incomeTitle">
+            <div class="section-header">
+              <h2 class="section-title" id="incomeTitle">Przychody</h2>
+              <span class="section-total" id="incomeTotal">Razem: 0 €</span>
             </div>
-            <div class="field-row">
-              <label for="kindergeld">Kindergeld</label>
-              <input class="money-input" id="kindergeld" data-category="income" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+            <div class="fields">
+              <div class="field-row">
+                <label for="salary">Twoja wypłata</label>
+                <input class="money-input" id="salary" data-category="income" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+              </div>
+              <div class="field-row">
+                <label for="kindergeld">Kindergeld</label>
+                <input class="money-input" id="kindergeld" data-category="income" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
         <section class="section-card" aria-labelledby="fixedTitle">
           <div class="section-header">
@@ -706,6 +913,59 @@
         </section>
       </aside>
     </div>
+    </section>
+
+    <section class="app-view" id="goalsView" aria-label="Widok celów">
+      <div class="goals-layout">
+        <section class="goals-stats" aria-label="Statystyki celów">
+          <article class="metric-card" style="--accent: var(--gold);">
+            <div class="metric-label"><span>Aktywne cele</span><span class="metric-icon">🎯</span></div>
+            <div class="metric-value" id="goalsCount">0</div>
+            <p class="metric-note">Liczba kart celów</p>
+          </article>
+          <article class="metric-card" style="--accent: var(--purple);">
+            <div class="metric-label"><span>Suma celów</span><span class="metric-icon">Σ</span></div>
+            <div class="metric-value" id="goalsTargetSum">0 €</div>
+            <p class="metric-note">Łączna kwota docelowa</p>
+          </article>
+          <article class="metric-card" style="--accent: var(--green);">
+            <div class="metric-label"><span>Odłożone środki</span><span class="metric-icon">↗</span></div>
+            <div class="metric-value" id="goalsCurrentSum">0 €</div>
+            <p class="metric-note">Suma aktualnych kwot</p>
+          </article>
+        </section>
+
+        <section class="section-card" aria-labelledby="newGoalTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="newGoalTitle">🎯 Cele</h2>
+            <span class="section-total">Dodaj osobny cel oszczędnościowy</span>
+          </div>
+          <div class="goal-form">
+            <div class="compact-field">
+              <label for="newGoalName">Nazwa celu</label>
+              <input class="text-input" id="newGoalName" type="text" placeholder="Radio do Astry">
+            </div>
+            <div class="compact-field">
+              <label for="newGoalTarget">Kwota docelowa</label>
+              <input class="money-input" id="newGoalTarget" type="number" min="0" step="0.01" inputmode="decimal" placeholder="300">
+            </div>
+            <div class="compact-field">
+              <label for="newGoalCurrent">Aktualna kwota</label>
+              <input class="money-input" id="newGoalCurrent" type="number" min="0" step="0.01" inputmode="decimal" placeholder="120">
+            </div>
+            <button class="action-btn" id="addGoalBtn" type="button">➕ Dodaj cel</button>
+          </div>
+        </section>
+
+        <section class="section-card" aria-labelledby="goalsListTitle">
+          <div class="section-header">
+            <h2 class="section-title" id="goalsListTitle">Lista celów</h2>
+            <span class="section-total" id="goalsSavedInfo">Zapis automatyczny</span>
+          </div>
+          <div class="goals-grid" id="goalsList"></div>
+        </section>
+      </div>
+    </section>
   </main>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -716,6 +976,7 @@
 
       // Stały klucz localStorage pozwala odtworzyć ostatni stan po ponownym otwarciu strony.
       const STORAGE_KEY = "budzet-msc-pro-state";
+      const GOALS_STORAGE_KEY = "budzet-msc-pro-goals";
       const fieldIds = [
         "salary",
         "kindergeld",
@@ -775,9 +1036,24 @@
         saveBtn: document.getElementById("saveBtn"),
         loadBtn: document.getElementById("loadBtn"),
         fileInput: document.getElementById("fileInput"),
+        budgetTab: document.getElementById("budgetTab"),
+        goalsTab: document.getElementById("goalsTab"),
+        budgetView: document.getElementById("budgetView"),
+        goalsView: document.getElementById("goalsView"),
+        goalsCount: document.getElementById("goalsCount"),
+        goalsTargetSum: document.getElementById("goalsTargetSum"),
+        goalsCurrentSum: document.getElementById("goalsCurrentSum"),
+        goalsSavedInfo: document.getElementById("goalsSavedInfo"),
+        goalsList: document.getElementById("goalsList"),
+        newGoalName: document.getElementById("newGoalName"),
+        newGoalTarget: document.getElementById("newGoalTarget"),
+        newGoalCurrent: document.getElementById("newGoalCurrent"),
+        addGoalBtn: document.getElementById("addGoalBtn"),
         toast: document.getElementById("toast"),
         chart: document.getElementById("budgetChart")
       };
+
+      let savingsGoals = [];
 
       // Formatowanie zachowuje polski zapis waluty i usuwa niepotrzebne grosze.
       const formatMoney = (value) => {
@@ -844,6 +1120,242 @@
           data
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      };
+
+      const makeGoalId = () => {
+        if (window.crypto?.randomUUID) {
+          return window.crypto.randomUUID();
+        }
+
+        return `goal-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      };
+
+      const createDefaultGoal = () => ({
+        id: makeGoalId(),
+        name: "🚗 Fundusz auta",
+        target: 500,
+        current: 0,
+        createdAt: new Date().toISOString()
+      });
+
+      const normalizeGoal = (goal) => ({
+        id: goal.id || makeGoalId(),
+        name: String(goal.name || "Nowy cel").trim() || "Nowy cel",
+        target: Math.max(parseMoney(goal.target), 1),
+        current: parseMoney(goal.current),
+        createdAt: goal.createdAt || new Date().toISOString()
+      });
+
+      const getGoalProgress = (goal) => Math.min((goal.current / goal.target) * 100, 100);
+
+      const saveGoalsToLocalStorage = () => {
+        const payload = {
+          app: "Budżet MSC Pro",
+          savedAt: new Date().toISOString(),
+          goals: savingsGoals
+        };
+        localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(payload));
+      };
+
+      const createGoalInput = ({ labelText, type, value, goalId, field, className }) => {
+        const wrapper = document.createElement("div");
+        const label = document.createElement("label");
+        const input = document.createElement("input");
+
+        wrapper.className = "compact-field";
+        label.textContent = labelText;
+        input.className = className;
+        input.type = type;
+        input.value = value;
+        input.dataset.goalId = goalId;
+        input.dataset.goalField = field;
+
+        if (type === "number") {
+          input.min = "0";
+          input.step = "0.01";
+          input.inputMode = "decimal";
+        }
+
+        wrapper.append(label, input);
+        return wrapper;
+      };
+
+      const updateGoalsStats = () => {
+        const totalTarget = savingsGoals.reduce((sum, goal) => sum + goal.target, 0);
+        const totalCurrent = savingsGoals.reduce((sum, goal) => sum + goal.current, 0);
+
+        setText(ui.goalsCount, String(savingsGoals.length));
+        setText(ui.goalsTargetSum, formatMoney(totalTarget));
+        setText(ui.goalsCurrentSum, formatMoney(totalCurrent));
+        setText(ui.goalsSavedInfo, "Zapis automatyczny");
+      };
+
+      const updateVisibleGoalCard = (goalId) => {
+        const goal = savingsGoals.find((item) => item.id === goalId);
+        const card = [...ui.goalsList.children].find((item) => item.dataset.goalId === goalId);
+
+        if (!goal || !card) {
+          return;
+        }
+
+        const progress = getGoalProgress(goal);
+        const remaining = Math.max(goal.target - goal.current, 0);
+
+        card.querySelector('[data-goal-part="name"]').textContent = goal.name;
+        card.querySelector('[data-goal-part="percent"]').textContent = `${Math.round(progress)}%`;
+        card.querySelector('[data-goal-part="progress"]').style.width = `${progress}%`;
+        card.querySelector('[data-goal-part="meta"]').innerHTML = `
+          <div class="goal-meta-row"><span>Cel</span><strong>${formatMoney(goal.target)}</strong></div>
+          <div class="goal-meta-row"><span>Aktualnie</span><strong>${formatMoney(goal.current)}</strong></div>
+          <div class="goal-meta-row"><span>Pozostało</span><strong>${formatMoney(remaining)}</strong></div>
+        `;
+      };
+
+      const renderGoals = () => {
+        updateGoalsStats();
+
+        ui.goalsList.innerHTML = "";
+
+        if (savingsGoals.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "empty-goals";
+          empty.textContent = "Brak aktywnych celów. Dodaj pierwszy cel oszczędnościowy.";
+          ui.goalsList.append(empty);
+          return;
+        }
+
+        savingsGoals.forEach((goal) => {
+          const progress = getGoalProgress(goal);
+          const remaining = Math.max(goal.target - goal.current, 0);
+          const card = document.createElement("article");
+          const top = document.createElement("div");
+          const name = document.createElement("h3");
+          const percent = document.createElement("span");
+          const editGrid = document.createElement("div");
+          const progressTrack = document.createElement("div");
+          const progressBar = document.createElement("div");
+          const meta = document.createElement("div");
+          const removeBtn = document.createElement("button");
+
+          card.className = "goal-card";
+          card.dataset.goalId = goal.id;
+          top.className = "goal-card-top";
+          name.className = "goal-name";
+          name.dataset.goalPart = "name";
+          name.textContent = goal.name;
+          percent.className = "goal-percent";
+          percent.dataset.goalPart = "percent";
+          percent.textContent = `${Math.round(progress)}%`;
+
+          editGrid.className = "goal-edit-grid";
+          editGrid.append(
+            createGoalInput({
+              labelText: "Nazwa celu",
+              type: "text",
+              value: goal.name,
+              goalId: goal.id,
+              field: "name",
+              className: "text-input"
+            }),
+            createGoalInput({
+              labelText: "Kwota docelowa",
+              type: "number",
+              value: goal.target,
+              goalId: goal.id,
+              field: "target",
+              className: "money-input"
+            }),
+            createGoalInput({
+              labelText: "Aktualna kwota",
+              type: "number",
+              value: goal.current,
+              goalId: goal.id,
+              field: "current",
+              className: "money-input"
+            })
+          );
+
+          progressTrack.className = "progress-track";
+          progressBar.className = "progress-bar";
+          progressBar.dataset.goalPart = "progress";
+          progressBar.style.width = `${progress}%`;
+          progressTrack.append(progressBar);
+
+          meta.className = "goal-meta";
+          meta.dataset.goalPart = "meta";
+          meta.innerHTML = `
+            <div class="goal-meta-row"><span>Cel</span><strong>${formatMoney(goal.target)}</strong></div>
+            <div class="goal-meta-row"><span>Aktualnie</span><strong>${formatMoney(goal.current)}</strong></div>
+            <div class="goal-meta-row"><span>Pozostało</span><strong>${formatMoney(remaining)}</strong></div>
+          `;
+
+          removeBtn.className = "action-btn ghost";
+          removeBtn.type = "button";
+          removeBtn.dataset.removeGoalId = goal.id;
+          removeBtn.textContent = "Usuń cel";
+
+          top.append(name, percent);
+          card.append(top, editGrid, progressTrack, meta, removeBtn);
+          ui.goalsList.append(card);
+        });
+      };
+
+      const persistAndRenderGoals = () => {
+        saveGoalsToLocalStorage();
+        renderGoals();
+      };
+
+      const restoreGoals = () => {
+        const saved = localStorage.getItem(GOALS_STORAGE_KEY);
+
+        if (!saved) {
+          savingsGoals = [createDefaultGoal()];
+          persistAndRenderGoals();
+          return;
+        }
+
+        try {
+          const payload = JSON.parse(saved);
+          const goals = Array.isArray(payload.goals) ? payload.goals : [];
+          savingsGoals = goals.map(normalizeGoal);
+          renderGoals();
+        } catch (error) {
+          console.warn("Nie udało się przywrócić celów:", error);
+          savingsGoals = [createDefaultGoal()];
+          persistAndRenderGoals();
+        }
+      };
+
+      const setActiveView = (viewName) => {
+        const showGoals = viewName === "goals";
+
+        ui.budgetTab.classList.toggle("active", !showGoals);
+        ui.goalsTab.classList.toggle("active", showGoals);
+        ui.budgetView.classList.toggle("active", !showGoals);
+        ui.goalsView.classList.toggle("active", showGoals);
+        ui.budgetTab.setAttribute("aria-selected", String(!showGoals));
+        ui.goalsTab.setAttribute("aria-selected", String(showGoals));
+
+        if (showGoals) {
+          renderGoals();
+        } else {
+          drawChart(calculateTotals(getFormData()));
+        }
+      };
+
+      const addGoal = () => {
+        const goal = normalizeGoal({
+          name: ui.newGoalName.value || "Nowy cel",
+          target: ui.newGoalTarget.value || 1,
+          current: ui.newGoalCurrent.value || 0
+        });
+
+        savingsGoals.push(goal);
+        ui.newGoalName.value = "";
+        ui.newGoalTarget.value = "";
+        ui.newGoalCurrent.value = "";
+        persistAndRenderGoals();
+        showToast("🎯 Dodano nowy cel");
       };
 
       // Wykres kołowy jest rysowany natywnie na canvasie, bez bibliotek zewnętrznych.
@@ -1017,6 +1529,44 @@
         elements[id].addEventListener("input", updateUI);
       });
 
+      ui.budgetTab.addEventListener("click", () => setActiveView("budget"));
+      ui.goalsTab.addEventListener("click", () => setActiveView("goals"));
+      ui.addGoalBtn.addEventListener("click", addGoal);
+      ui.goalsList.addEventListener("input", (event) => {
+        const input = event.target;
+        const goalId = input.dataset.goalId;
+        const field = input.dataset.goalField;
+
+        if (!goalId || !field) {
+          return;
+        }
+
+        savingsGoals = savingsGoals.map((goal) => {
+          if (goal.id !== goalId) {
+            return goal;
+          }
+
+          const nextGoal = { ...goal };
+          nextGoal[field] = field === "name" ? input.value : parseMoney(input.value);
+          return normalizeGoal(nextGoal);
+        });
+
+        saveGoalsToLocalStorage();
+        updateGoalsStats();
+        updateVisibleGoalCard(goalId);
+      });
+      ui.goalsList.addEventListener("click", (event) => {
+        const goalId = event.target.dataset.removeGoalId;
+
+        if (!goalId) {
+          return;
+        }
+
+        savingsGoals = savingsGoals.filter((goal) => goal.id !== goalId);
+        persistAndRenderGoals();
+        showToast("Usunięto cel");
+      });
+
       ui.saveBtn.addEventListener("click", exportJson);
       ui.loadBtn.addEventListener("click", () => ui.fileInput.click());
       ui.fileInput.addEventListener("change", (event) => {
@@ -1031,6 +1581,7 @@
       });
 
       restoreLastState();
+      restoreGoals();
     })();
   </script>
 </body>
